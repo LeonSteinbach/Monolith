@@ -1,5 +1,8 @@
-﻿using Monolith;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
+using Monolith;
+using Monolith.assets;
+using Monolith.settings;
+using Monolith.window;
 
 namespace Sandbox;
 
@@ -25,12 +28,14 @@ public class Game : MonolithGame
 	{
 		AppSettings.Content = Content;
 		AppSettings.ContentRoot = "res";
-		
+
 		base.Initialize();
 	}
 
 	protected override void LoadContent()
 	{
+		AssetManager.LoadTexture("player", @"images\player");
+		
 		base.LoadContent();
 	}
 
@@ -46,6 +51,14 @@ public class Game : MonolithGame
 
 	protected override void Draw(GameTime gameTime)
 	{
+		GraphicsDevice.Clear(Color.Black);
+		
+		spriteBatch.Begin();
+		
+		spriteBatch.Draw(AssetManager.GetTexture("player"), new Vector2(100, 200), Color.White);
+		
+		spriteBatch.End();
+		
 		base.Draw(gameTime);
 	}
 }

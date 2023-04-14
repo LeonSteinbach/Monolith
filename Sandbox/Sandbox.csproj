@@ -16,7 +16,16 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="res" />
+      <Folder Include="res\audio" />
+      <Folder Include="res\images" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <MonoGameContentReference Include="res\content.mgcb" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="MonoGame.Content.Builder" Version="3.7.0.9" />
     </ItemGroup>
 
 </Project>

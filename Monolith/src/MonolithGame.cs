@@ -1,13 +1,14 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Monolith.assets;
 
 namespace Monolith;
 
 public class MonolithGame : Game
 {
 	public GraphicsDeviceManager graphics;
-	private SpriteBatch spriteBatch;
+	protected SpriteBatch spriteBatch;
 
 	protected MonolithGame()
 	{
@@ -16,6 +17,8 @@ public class MonolithGame : Game
 
 	protected override void Initialize()
 	{
+		AssetManager.Initialize();
+		
 		base.Initialize();
 	}
 
@@ -35,8 +38,6 @@ public class MonolithGame : Game
 
 	protected override void Draw(GameTime gameTime)
 	{
-		GraphicsDevice.Clear(Color.Black);
-
 		base.Draw(gameTime);
 	}
 }

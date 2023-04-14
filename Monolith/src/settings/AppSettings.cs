@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework.Content;
 
-namespace Monolith;
+namespace Monolith.settings;
 
 public static class AppSettings
 {
