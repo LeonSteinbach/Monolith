@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Monolith;
 using Monolith.assets;
+using Monolith.graphics;
 using Monolith.settings;
 using Monolith.window;
 
@@ -53,9 +55,15 @@ public class Game : MMonolithGame
 	{
 		GraphicsDevice.Clear(Color.Black);
 		
-		spriteBatch.Begin();
-		
-		spriteBatch.Draw(MAssetManager.GetTexture("player"), new Vector2(100, 200), Color.White);
+		spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, null);
+
+		MStaticSprite sprite = new MStaticSprite(MAssetManager.GetTexture("player"))
+		{
+			Position = new Vector2(100, 200),
+			Scale = new Vector2(5, 5),
+			Rotation = 0f
+		};
+		sprite.Render(gameTime, spriteBatch);
 		
 		spriteBatch.End();
 		
