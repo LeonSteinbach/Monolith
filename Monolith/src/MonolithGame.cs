@@ -32,6 +32,7 @@ public class MonolithGame : Game
 
 	protected override void Update(GameTime gameTime)
 	{
+		Input.Update();
 		if (Input.IsKeyPressed(Keys.Escape))
 			Exit();
 		

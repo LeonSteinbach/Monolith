@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework;
 
 namespace Monolith.math;
 
-public class MathHelper
+public class MathUtil
 {
 	private static readonly Random random = new Random();
         
@@ -97,10 +97,10 @@ public class MathHelper
                     int sampleJ1 = (sampleJ0 + samplePeriod) % height;
                     float verticalBlend = (j - sampleJ0) * sampleFrequency;
 
-                    float top = MathHelper.Interpolate(baseNoise[sampleI0, sampleJ0], baseNoise[sampleI1, sampleJ0], horizontalBlend);
-                    float bottom = MathHelper.Interpolate(baseNoise[sampleI0, sampleJ1], baseNoise[sampleI1, sampleJ1], horizontalBlend);
+                    float top = Interpolate(baseNoise[sampleI0, sampleJ0], baseNoise[sampleI1, sampleJ0], horizontalBlend);
+                    float bottom = Interpolate(baseNoise[sampleI0, sampleJ1], baseNoise[sampleI1, sampleJ1], horizontalBlend);
 
-                    smoothNoise[i, j] = MathHelper.Interpolate(top, bottom, verticalBlend);
+                    smoothNoise[i, j] = Interpolate(top, bottom, verticalBlend);
                 }
             }
 
@@ -141,7 +141,6 @@ public class MathHelper
                         perlinNoise[i, j] += smoothNoise[octave][i, j] * amplitude;
             }
 
-            // Normalize
             for (int i = 0; i < width; i++)
                 for (int j = 0; j < height; j++)
                     perlinNoise[i, j] /= totalAmplitude;

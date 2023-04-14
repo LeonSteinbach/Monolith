@@ -51,7 +51,7 @@ public static class Input
 	private static DateTime lastRightClickTime = DateTime.Now;
 	private static int leftPressCount;
 	private static int rightPressCount;
-	private const int doubleClickDelay = 1000;
+	private const int doubleClickDelay = 500;
 
 	public static Point MousePosition()
 	{
@@ -130,19 +130,14 @@ public static class Input
 
 	#endregion
 
-	// Updates the last- and current states
 	public static void Update()
 	{
-		// Update keyboard states
 		previousKeyboardState = currentKeyboardState;
 		currentKeyboardState = Keyboard.GetState();
 
-		// Update mouse states
 		previousMouseState = currentMouseState;
 		currentMouseState = Mouse.GetState();
 
-		// Update double clicks
-		// Left
 		if ((DateTime.Now - lastLeftClickTime).TotalMilliseconds > doubleClickDelay || leftPressCount == 2) {
 			leftPressCount = 0;
 		}
@@ -152,7 +147,6 @@ public static class Input
 			leftPressCount++;
 		}
 
-		// Right
 		if ((DateTime.Now - lastRightClickTime).TotalMilliseconds > doubleClickDelay || rightPressCount == 2) {
 			rightPressCount = 0;
 		}
