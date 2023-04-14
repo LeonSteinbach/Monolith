@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Content;
 
 namespace Monolith.settings;
 
-public static class AppSettings
+public static class MAppSettings
 {
 	public static ContentManager Content { get; set; }
 	

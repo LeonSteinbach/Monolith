@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Monolith.diagnostics;
 
-public static class TimeHelper
+public static class MTimeHelper
 {
 	public static long TotalFrames { get; private set; }
 	public static float TotalSeconds { get; private set; }

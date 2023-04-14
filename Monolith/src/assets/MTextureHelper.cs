@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Monolith.assets;
 
-public static class TextureHelper
+public static class MTextureHelper
 {
 	public static Color[,] TextureToArray(Texture2D texture)
 	{

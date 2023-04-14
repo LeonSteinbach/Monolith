@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Monolith.input;
 
-public static class Input
+public static class MInput
 {
 	#region KeyboardInput
 

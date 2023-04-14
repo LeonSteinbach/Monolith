@@ -7,20 +7,20 @@ using Monolith.input;
 
 namespace Monolith;
 
-public class MonolithGame : Game
+public class MMonolithGame : Game
 {
 	public GraphicsDeviceManager graphics;
 	protected SpriteBatch spriteBatch;
 
-	protected MonolithGame()
+	protected MMonolithGame()
 	{
 		graphics = new GraphicsDeviceManager(this);
 	}
 
 	protected override void Initialize()
 	{
-		AssetManager.Initialize();
-		AudioManager.Initialize();
+		MAssetManager.Initialize();
+		MAudioManager.Initialize();
 		
 		base.Initialize();
 	}
@@ -32,11 +32,11 @@ public class MonolithGame : Game
 
 	protected override void Update(GameTime gameTime)
 	{
-		Input.Update();
-		if (Input.IsKeyPressed(Keys.Escape))
+		MInput.Update();
+		if (MInput.IsKeyPressed(Keys.Escape))
 			Exit();
 		
-		TimeHelper.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
+		MTimeHelper.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
 
 		base.Update(gameTime);
 	}

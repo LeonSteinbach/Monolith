@@ -6,13 +6,13 @@ using Monolith.window;
 
 namespace Sandbox;
 
-public class Game : MonolithGame
+public class Game : MMonolithGame
 {
-	private MonolithWindow window;
+	private MMonolithWindow window;
 	
 	public Game()
 	{
-		window = new MonolithWindow(this)
+		window = new MMonolithWindow(this)
 		{
 			Size = new Point(1200, 800),
 			Title = "Sandbox",
@@ -26,15 +26,15 @@ public class Game : MonolithGame
 
 	protected override void Initialize()
 	{
-		AppSettings.Content = Content;
-		AppSettings.ContentRoot = "res";
+		MAppSettings.Content = Content;
+		MAppSettings.ContentRoot = "res";
 
 		base.Initialize();
 	}
 
 	protected override void LoadContent()
 	{
-		AssetManager.LoadTexture("player", @"images\player");
+		MAssetManager.LoadTexture("player", @"images\player");
 		
 		base.LoadContent();
 	}
@@ -55,7 +55,7 @@ public class Game : MonolithGame
 		
 		spriteBatch.Begin();
 		
-		spriteBatch.Draw(AssetManager.GetTexture("player"), new Vector2(100, 200), Color.White);
+		spriteBatch.Draw(MAssetManager.GetTexture("player"), new Vector2(100, 200), Color.White);
 		
 		spriteBatch.End();
 		

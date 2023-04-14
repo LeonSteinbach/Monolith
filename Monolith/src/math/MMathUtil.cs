@@ -4,9 +4,9 @@ using Microsoft.Xna.Framework;
 
 namespace Monolith.math;
 
-public class MathUtil
+public static class MMathHelper
 {
-	private static readonly Random random = new Random();
+	private static readonly Random random = new ();
         
 	public static float RandFloat()
 	{

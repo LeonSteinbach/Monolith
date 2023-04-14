@@ -8,7 +8,7 @@ using Monolith.settings;
 
 namespace Monolith.assets;
 
-public static class AssetManager
+public static class MAssetManager
 {
     private static ContentManager content;
     
@@ -20,7 +20,7 @@ public static class AssetManager
 
     internal static void Initialize()
     {
-        content = AppSettings.Content;
+        content = MAppSettings.Content;
         if (content is null)
             throw new NullReferenceException(
                 "The content manager must be initialized before initializing the asset manager!");
@@ -60,12 +60,12 @@ public static class AssetManager
     
     public static void LoadTexture(string key, string path, float scale, GraphicsDevice graphicsDevice)
     {
-        textures.Add(key, TextureHelper.ScaleTexture(content.Load<Texture2D>(path), scale, graphicsDevice));
+        textures.Add(key, MTextureHelper.ScaleTexture(content.Load<Texture2D>(path), scale, graphicsDevice));
     }
     
     public static void LoadTexture(string key, string path, Vector2 scale, GraphicsDevice graphicsDevice)
     {
-        textures.Add(key, TextureHelper.ScaleTexture(content.Load<Texture2D>(path), scale, graphicsDevice));
+        textures.Add(key, MTextureHelper.ScaleTexture(content.Load<Texture2D>(path), scale, graphicsDevice));
     }
 
     public static void LoadFont(string key, string path)
@@ -75,7 +75,7 @@ public static class AssetManager
     
     public static void LoadFont(string key, string path, float spacing, int lineSpacing)
     {
-        fonts.Add(key, FontHelper.SpacingFont(content.Load<SpriteFont>(path), spacing, lineSpacing));
+        fonts.Add(key, MFontHelper.SpacingFont(content.Load<SpriteFont>(path), spacing, lineSpacing));
     }
     
     public static void LoadShader(string key, string path)

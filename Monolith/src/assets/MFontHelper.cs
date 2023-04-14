@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Monolith.assets;
 
-public static class FontHelper
+public static class MFontHelper
 {
 	public static SpriteFont SpacingFont(SpriteFont font, float spacing, int lineSpacing)
 	{

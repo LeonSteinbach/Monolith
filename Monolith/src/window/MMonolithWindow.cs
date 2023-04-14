@@ -2,9 +2,9 @@
 
 namespace Monolith.window;
 
-public class MonolithWindow
+public class MMonolithWindow
 {
-	private readonly MonolithGame game;
+	private readonly MMonolithGame game;
 
 	private Point size;
 	public Point Size
@@ -146,7 +146,7 @@ public class MonolithWindow
 		}
 	}
 
-	public MonolithWindow(MonolithGame game)
+	public MMonolithWindow(MMonolithGame game)
 	{
 		this.game = game;
 	}

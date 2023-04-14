@@ -6,7 +6,7 @@ using Monolith.math;
 
 namespace Monolith.camera;
 
-public class Camera
+public class MCamera
 {
     private Point windowSize;
 
@@ -76,7 +76,7 @@ public class Camera
 	private Vector2 position;
 	private Vector2 targetPosition;
 
-	public Camera(Point windowSize)
+	public MCamera(Point windowSize)
 	{
 		this.windowSize = windowSize;
 		
@@ -190,7 +190,7 @@ public class Camera
 		if (shaking)
 		{
 			targetPosition = position + new Vector2(
-				MathUtil.RandFloat() * 2 - 1, MathUtil.RandFloat() * 2 - 1) * shakingForce;
+				MMathHelper.RandFloat() * 2 - 1, MMathHelper.RandFloat() * 2 - 1) * shakingForce;
 
 			if ((DateTime.Now - shakingStarted).TotalMilliseconds >= shakingDuration)
 			{

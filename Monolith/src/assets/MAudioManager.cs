@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Audio;
 
 namespace Monolith.assets;
 
-public static class AudioManager
+public static class MAudioManager
 {
 	private static Dictionary<string, SoundEffectInstance> sounds, music;
 	private static float soundVolume, musicVolume;
@@ -42,7 +42,7 @@ public static class AudioManager
 
 	public static void PlaySound(string asset)
 	{
-		SoundEffectInstance instance = AssetManager.GetSound(asset).CreateInstance();
+		SoundEffectInstance instance = MAssetManager.GetSound(asset).CreateInstance();
 		sounds.Add(asset, instance);
 
 		instance.Volume = soundVolume;
@@ -81,7 +81,7 @@ public static class AudioManager
 
 	public static void PlayMusic(string asset, bool looped = false)
 	{
-		SoundEffectInstance instance = AssetManager.GetSound(asset).CreateInstance();
+		SoundEffectInstance instance = MAssetManager.GetSound(asset).CreateInstance();
 		music.Add(asset, instance);
 
 		instance.IsLooped = looped;
