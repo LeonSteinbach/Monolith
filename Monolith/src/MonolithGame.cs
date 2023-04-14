@@ -2,6 +2,8 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Monolith.assets;
+using Monolith.diagnostics;
+using Monolith.input;
 
 namespace Monolith;
 
@@ -18,6 +20,7 @@ public class MonolithGame : Game
 	protected override void Initialize()
 	{
 		AssetManager.Initialize();
+		AudioManager.Initialize();
 		
 		base.Initialize();
 	}
@@ -29,9 +32,10 @@ public class MonolithGame : Game
 
 	protected override void Update(GameTime gameTime)
 	{
-		if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
-			Keyboard.GetState().IsKeyDown(Keys.Escape))
+		if (Input.IsKeyPressed(Keys.Escape))
 			Exit();
+		
+		TimeHelper.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
 
 		base.Update(gameTime);
 	}
