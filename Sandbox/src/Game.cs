@@ -12,7 +12,7 @@ public class Game : MMonolithGame
 {
 	private MMonolithWindow window;
 	
-	private MButton button;
+	private MCheckbox button;
 	
 	public Game()
 	{
@@ -42,17 +42,24 @@ public class Game : MMonolithGame
 
 		MStaticSprite sprite1 = new MStaticSprite(MTextureHelper.ScaleTexture(MAssetManager.GetTexture("player"), 4f, GraphicsDevice))
 		{
-			Position = new Vector2(500, 500),
-			Centered = true
+			Position = new Vector2(500, 500)
 		};
 		MStaticSprite sprite2 = new MStaticSprite(MTextureHelper.ScaleTexture(MAssetManager.GetTexture("player"), 4f, GraphicsDevice))
 		{
 			Position = new Vector2(500, 500),
-			Scale = new Vector2(2f, 2f),
-			Centered = true,
-			Rotation = 1f
+			Scale = new Vector2(2f, 2f)
 		};
-		button = new MButton(sprite1, sprite2);
+		MStaticSprite sprite3 = new MStaticSprite(MTextureHelper.ScaleTexture(MAssetManager.GetTexture("player"), 4f, GraphicsDevice))
+		{
+			Position = new Vector2(500, 500),
+			Scale = new Vector2(3f, 3f)
+		};
+		MStaticSprite sprite4 = new MStaticSprite(MTextureHelper.ScaleTexture(MAssetManager.GetTexture("player"), 4f, GraphicsDevice))
+		{
+			Position = new Vector2(500, 500),
+			Scale = new Vector2(4f, 4f)
+		};
+		button = new MCheckbox(sprite1, sprite2, sprite3, sprite4, false);
 		
 		base.LoadContent();
 	}
@@ -75,15 +82,6 @@ public class Game : MMonolithGame
 		
 		spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, null);
 
-		MStaticSprite sprite = new MStaticSprite(MAssetManager.GetTexture("player"))
-		{
-			Position = new Vector2(0, 0),
-			Rotation = 0f,
-			Centered = false
-		};
-		//sprite.Render(gameTime, spriteBatch);
-
-		
 		button.Render(gameTime, spriteBatch);
 		
 		spriteBatch.End();

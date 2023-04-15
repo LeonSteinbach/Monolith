@@ -15,7 +15,7 @@ public class MButton
 	private readonly string hoverSound, clickSound;
 
 	private bool isHovering, wasHovering;
-	private bool isPressed, wasPressed;
+	private bool isPressed;
 
 	public MButton(MStaticSprite defaultSprite, MStaticSprite hoverSprite, string hoverSound = null, 
 		string clickSound = null, string text = null, SpriteFont font = null, Color color = default)
@@ -44,7 +44,6 @@ public class MButton
 		wasHovering = isHovering;
 		isHovering = Rectangle.Contains(MInput.MousePosition());
 
-		wasPressed = isPressed;
 		isPressed = isHovering && MInput.IsLeftPressed();
 
 		if (Entered() && hoverSound != null)
