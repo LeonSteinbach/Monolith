@@ -11,8 +11,9 @@ namespace Sandbox;
 public class Game : MMonolithGame
 {
 	private MMonolithWindow window;
-	
-	private MCheckbox button;
+
+	private MRadioGroup radioGroup;
+	private MRadioButton button1, button2;
 	
 	public Game()
 	{
@@ -42,24 +43,50 @@ public class Game : MMonolithGame
 
 		MStaticSprite sprite1 = new MStaticSprite(MTextureHelper.ScaleTexture(MAssetManager.GetTexture("player"), 4f, GraphicsDevice))
 		{
-			Position = new Vector2(500, 500)
+			Position = new Vector2(500, 200)
 		};
 		MStaticSprite sprite2 = new MStaticSprite(MTextureHelper.ScaleTexture(MAssetManager.GetTexture("player"), 4f, GraphicsDevice))
 		{
-			Position = new Vector2(500, 500),
+			Position = new Vector2(500, 200),
 			Scale = new Vector2(2f, 2f)
 		};
 		MStaticSprite sprite3 = new MStaticSprite(MTextureHelper.ScaleTexture(MAssetManager.GetTexture("player"), 4f, GraphicsDevice))
 		{
-			Position = new Vector2(500, 500),
+			Position = new Vector2(500, 200),
 			Scale = new Vector2(3f, 3f)
 		};
 		MStaticSprite sprite4 = new MStaticSprite(MTextureHelper.ScaleTexture(MAssetManager.GetTexture("player"), 4f, GraphicsDevice))
 		{
-			Position = new Vector2(500, 500),
+			Position = new Vector2(500, 200),
 			Scale = new Vector2(4f, 4f)
 		};
-		button = new MCheckbox(sprite1, sprite2, sprite3, sprite4, false);
+		
+		MStaticSprite sprite5 = new MStaticSprite(MTextureHelper.ScaleTexture(MAssetManager.GetTexture("player"), 4f, GraphicsDevice))
+		{
+			Position = new Vector2(500, 600)
+		};
+		MStaticSprite sprite6 = new MStaticSprite(MTextureHelper.ScaleTexture(MAssetManager.GetTexture("player"), 4f, GraphicsDevice))
+		{
+			Position = new Vector2(500, 600),
+			Scale = new Vector2(2f, 2f)
+		};
+		MStaticSprite sprite7 = new MStaticSprite(MTextureHelper.ScaleTexture(MAssetManager.GetTexture("player"), 4f, GraphicsDevice))
+		{
+			Position = new Vector2(500, 600),
+			Scale = new Vector2(3f, 3f)
+		};
+		MStaticSprite sprite8 = new MStaticSprite(MTextureHelper.ScaleTexture(MAssetManager.GetTexture("player"), 4f, GraphicsDevice))
+		{
+			Position = new Vector2(500, 600),
+			Scale = new Vector2(4f, 4f)
+		};
+		
+		button1 = new MRadioButton(sprite1, sprite2, sprite3, sprite4, text: "hallo", isChecked: true);
+		button2 = new MRadioButton(sprite5, sprite6, sprite7, sprite8, text: "asdf", isChecked: false);
+
+		radioGroup = new MRadioGroup();
+		radioGroup.AddButton(button1);
+		radioGroup.AddButton(button2);
 		
 		base.LoadContent();
 	}
@@ -71,7 +98,8 @@ public class Game : MMonolithGame
 
 	protected override void Update(GameTime gameTime)
 	{
-		button.Update();
+		radioGroup.Update();
+		Console.WriteLine(radioGroup.GetSelectedText());
 		
 		base.Update(gameTime);
 	}
@@ -82,7 +110,7 @@ public class Game : MMonolithGame
 		
 		spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, null);
 
-		button.Render(gameTime, spriteBatch);
+		radioGroup.Render(gameTime, spriteBatch);
 		
 		spriteBatch.End();
 		

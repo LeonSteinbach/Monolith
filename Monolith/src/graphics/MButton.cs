@@ -17,6 +17,8 @@ public class MButton
 	private bool isHovering, wasHovering;
 	private bool isPressed;
 
+	public event Action<MButton> OnPressed; 
+
 	public MButton(MStaticSprite defaultSprite, MStaticSprite hoverSprite, string hoverSound = null, 
 		string clickSound = null, string text = null, SpriteFont font = null, Color color = default)
 	{
@@ -51,9 +53,12 @@ public class MButton
 			MAudioManager.PlaySound(hoverSound);
 		}
 
-		if (Pressed() && clickSound != null)
+		if (Pressed())
 		{
-			MAudioManager.PlaySound(clickSound);
+			if (clickSound != null)
+				MAudioManager.PlaySound(clickSound);
+			
+			OnPressed?.Invoke(this);
 		}
 	}
 

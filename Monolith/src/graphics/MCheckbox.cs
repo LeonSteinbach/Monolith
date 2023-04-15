@@ -14,6 +14,9 @@ namespace Monolith.graphics
         private bool isHovering, wasHovering;
         private bool isPressed;
         private bool isChecked;
+        
+        public event Action<MCheckbox> OnChecked;
+        public event Action<MCheckbox> OnUnChecked;
 
         public MCheckbox(MStaticSprite defaultSprite, MStaticSprite hoverUncheckedSprite, MStaticSprite checkedSprite,
             MStaticSprite hoverCheckedSprite, bool isChecked, string hoverSound = null, string clickSound = null)
@@ -57,13 +60,19 @@ namespace Monolith.graphics
                 if (clickSound != null)
                     MAudioManager.PlaySound(clickSound);
                 isChecked = !isChecked;
+                
+                if (isChecked)
+                    OnChecked?.Invoke(this);
+                else
+                    OnUnChecked?.Invoke(this);
             }
         }
 
         public void Render(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            MStaticSprite sprite = Hover() ? (isChecked ? hoverCheckedSprite : hoverUncheckedSprite) :
-                                             (isChecked ? checkedSprite : defaultSprite);
+            MStaticSprite sprite = Hover() ?
+                (isChecked ? hoverCheckedSprite : hoverUncheckedSprite) : 
+                (isChecked ? checkedSprite : defaultSprite);
 
             sprite.Render(gameTime, spriteBatch);
         }
