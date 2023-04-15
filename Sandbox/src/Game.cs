@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Monolith;
 using Monolith.assets;
 using Monolith.graphics;
+using Monolith.scene;
 using Monolith.settings;
 using Monolith.window;
 
@@ -12,9 +13,8 @@ public class Game : MMonolithGame
 {
 	private MMonolithWindow window;
 
-	private MRadioGroup radioGroup;
-	private MRadioButton button1, button2;
-	
+	private MScene mainScene;
+
 	public Game()
 	{
 		window = new MMonolithWindow(this)
@@ -41,52 +41,20 @@ public class Game : MMonolithGame
 	{
 		MAssetManager.LoadTexture("player", @"images\player");
 
-		MStaticSprite sprite1 = new MStaticSprite(MTextureHelper.ScaleTexture(MAssetManager.GetTexture("player"), 4f, GraphicsDevice))
-		{
-			Position = new Vector2(500, 200)
-		};
-		MStaticSprite sprite2 = new MStaticSprite(MTextureHelper.ScaleTexture(MAssetManager.GetTexture("player"), 4f, GraphicsDevice))
-		{
-			Position = new Vector2(500, 200),
-			Scale = new Vector2(2f, 2f)
-		};
-		MStaticSprite sprite3 = new MStaticSprite(MTextureHelper.ScaleTexture(MAssetManager.GetTexture("player"), 4f, GraphicsDevice))
-		{
-			Position = new Vector2(500, 200),
-			Scale = new Vector2(3f, 3f)
-		};
-		MStaticSprite sprite4 = new MStaticSprite(MTextureHelper.ScaleTexture(MAssetManager.GetTexture("player"), 4f, GraphicsDevice))
-		{
-			Position = new Vector2(500, 200),
-			Scale = new Vector2(4f, 4f)
-		};
+		mainScene = new MScene();
+		MScene scene1 = new MScene();
+		MScene scene2 = new MScene();
 		
-		MStaticSprite sprite5 = new MStaticSprite(MTextureHelper.ScaleTexture(MAssetManager.GetTexture("player"), 4f, GraphicsDevice))
-		{
-			Position = new Vector2(500, 600)
-		};
-		MStaticSprite sprite6 = new MStaticSprite(MTextureHelper.ScaleTexture(MAssetManager.GetTexture("player"), 4f, GraphicsDevice))
-		{
-			Position = new Vector2(500, 600),
-			Scale = new Vector2(2f, 2f)
-		};
-		MStaticSprite sprite7 = new MStaticSprite(MTextureHelper.ScaleTexture(MAssetManager.GetTexture("player"), 4f, GraphicsDevice))
-		{
-			Position = new Vector2(500, 600),
-			Scale = new Vector2(3f, 3f)
-		};
-		MStaticSprite sprite8 = new MStaticSprite(MTextureHelper.ScaleTexture(MAssetManager.GetTexture("player"), 4f, GraphicsDevice))
-		{
-			Position = new Vector2(500, 600),
-			Scale = new Vector2(4f, 4f)
-		};
+		MNode n1 = new MNode(new Vector2(100, 100), Vector2.One, 0f, "n1");
+		MNode n2 = new MNode(new Vector2(200, 200), Vector2.One, 0f, "n2");
+		MNode n3 = new MNode(new Vector2(300, 300), Vector2.One, 0f, "n3");
 		
-		button1 = new MRadioButton(sprite1, sprite2, sprite3, sprite4, text: "hallo", isChecked: true);
-		button2 = new MRadioButton(sprite5, sprite6, sprite7, sprite8, text: "asdf", isChecked: false);
-
-		radioGroup = new MRadioGroup();
-		radioGroup.AddButton(button1);
-		radioGroup.AddButton(button2);
+		scene1.AddNode(n1);
+		scene1.AddNode(n2);
+		scene2.AddNode(n3);
+		
+		mainScene.AddScene(scene1);
+		mainScene.AddScene(scene2);
 		
 		base.LoadContent();
 	}
@@ -98,8 +66,7 @@ public class Game : MMonolithGame
 
 	protected override void Update(GameTime gameTime)
 	{
-		radioGroup.Update();
-		Console.WriteLine(radioGroup.GetSelectedText());
+		mainScene.Update(gameTime);
 		
 		base.Update(gameTime);
 	}
@@ -110,7 +77,7 @@ public class Game : MMonolithGame
 		
 		spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, null);
 
-		radioGroup.Render(gameTime, spriteBatch);
+		mainScene.Render(graphics, spriteBatch, gameTime);
 		
 		spriteBatch.End();
 		
