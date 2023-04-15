@@ -12,6 +12,8 @@ public class Game : MMonolithGame
 {
 	private MMonolithWindow window;
 	
+	private MButton button;
+	
 	public Game()
 	{
 		window = new MMonolithWindow(this)
@@ -37,6 +39,20 @@ public class Game : MMonolithGame
 	protected override void LoadContent()
 	{
 		MAssetManager.LoadTexture("player", @"images\player");
+
+		MStaticSprite sprite1 = new MStaticSprite(MTextureHelper.ScaleTexture(MAssetManager.GetTexture("player"), 4f, GraphicsDevice))
+		{
+			Position = new Vector2(500, 500),
+			Centered = true
+		};
+		MStaticSprite sprite2 = new MStaticSprite(MTextureHelper.ScaleTexture(MAssetManager.GetTexture("player"), 4f, GraphicsDevice))
+		{
+			Position = new Vector2(500, 500),
+			Scale = new Vector2(2f, 2f),
+			Centered = true,
+			Rotation = 1f
+		};
+		button = new MButton(sprite1, sprite2);
 		
 		base.LoadContent();
 	}
@@ -48,6 +64,8 @@ public class Game : MMonolithGame
 
 	protected override void Update(GameTime gameTime)
 	{
+		button.Update();
+		
 		base.Update(gameTime);
 	}
 
@@ -59,11 +77,14 @@ public class Game : MMonolithGame
 
 		MStaticSprite sprite = new MStaticSprite(MAssetManager.GetTexture("player"))
 		{
-			Position = new Vector2(100, 200),
-			Scale = new Vector2(5, 5),
-			Rotation = 0f
+			Position = new Vector2(0, 0),
+			Rotation = 0f,
+			Centered = false
 		};
-		sprite.Render(gameTime, spriteBatch);
+		//sprite.Render(gameTime, spriteBatch);
+
+		
+		button.Render(gameTime, spriteBatch);
 		
 		spriteBatch.End();
 		

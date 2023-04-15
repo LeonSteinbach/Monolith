@@ -6,12 +6,13 @@ namespace Monolith.graphics
     public interface IMSprite
     {
         public Vector2 Position { get; set; }
-        public Rectangle Hitbox { get; set; }
+        public bool Centered { get; set; }
         public Color Color { get; set; }
         public float Rotation { get; set; }
-        public Vector2 Origin { get; set; }
         public Vector2 Scale { get; set; }
         public float Layer { get; set; }
+        public Rectangle Hitbox { get; }
+        public Vector2 Origin { get; }
         public void Render(GameTime gameTime, SpriteBatch spriteBatch);
     }
 
@@ -28,10 +29,9 @@ namespace Monolith.graphics
         public bool Looping { get; set; }
         public bool Flipped { get; set; }
         public Vector2 Position { get; set; }
-        public Rectangle Hitbox { get; set; }
+        public bool Centered { get; set; } = true;
         public Color Color { get; set; } = Color.White;
         public float Rotation { get; set; }
-        public Vector2 Origin { get; set; }
         public Vector2 Scale { get; set; } = Vector2.One;
         public float Layer { get; set; }
 
@@ -50,8 +50,29 @@ namespace Monolith.graphics
 
             Looping = looping;
             Flipped = flipped;
-            Hitbox = new Rectangle((int)Position.X, (int)Position.Y, frameWidth, frameHeight);
         }
+
+        public Rectangle Hitbox
+        {
+            get
+            {
+                if (Centered)
+                {
+                    return new Rectangle(
+                        (int)Position.X - texture.Width / 2,
+                        (int)Position.Y - texture.Height / 2,
+                        (int)(texture.Width * Scale.X),
+                        (int)(texture.Height * Scale.Y));              
+                }
+                return new Rectangle(
+                    (int)Position.X,
+                    (int)Position.Y,
+                    (int)(texture.Width * Scale.X),
+                    (int)(texture.Height * Scale.Y));
+            }
+        }
+
+        public Vector2 Origin => Centered ? Hitbox.Size.ToVector2() / 2 : Vector2.Zero;
 
         public void Start()
         {
@@ -107,8 +128,6 @@ namespace Monolith.graphics
 
                 elapsed = 0d;
             }
-
-            Hitbox = new Rectangle((int)Position.X, (int)Position.Y, frameWidth, frameHeight);
         }
     }
 
@@ -116,10 +135,9 @@ namespace Monolith.graphics
     {
         private readonly Texture2D texture;
         public Vector2 Position { get; set; }
-        public Rectangle Hitbox { get; set; }
+        public bool Centered { get; set; } = true;
         public Color Color { get; set; } = Color.White;
         public float Rotation { get; set; }
-        public Vector2 Origin { get; set; }
         public Vector2 Scale { get; set; } = Vector2.One;
         public float Layer { get; set; }
 
@@ -127,12 +145,26 @@ namespace Monolith.graphics
         {
             this.texture = texture;
             Position = Vector2.Zero;
-            Hitbox = new Rectangle((int)Position.X, (int)Position.Y, texture.Width, texture.Height);
         }
+        
+        public Rectangle Hitbox
+        {
+            get
+            {
+                int width = (int)(texture.Width * Scale.X);
+                int height = (int)(texture.Height * Scale.Y);
+                int x = (int)(Position.X - Origin.X * Scale.X);
+                int y = (int)(Position.Y - Origin.Y * Scale.Y);
+
+                return new Rectangle(x, y, width, height);
+            }
+        }
+
+        public Vector2 Origin => Centered ? texture.Bounds.Size.ToVector2() / 2 : Vector2.Zero;
 
         public void Render(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(texture, Position, null, Color, Rotation, Origin, Scale, SpriteEffects.None, Layer);
+            spriteBatch.Draw(texture, Position, null, Color.Red, Rotation, Origin, Scale, SpriteEffects.None, Layer);
         }
     }
 }
