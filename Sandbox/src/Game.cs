@@ -13,7 +13,7 @@ public class Game : MMonolithGame
 {
 	private MMonolithWindow window;
 
-	private MScene mainScene;
+	private MScene mainScene, scene1, scene2;
 
 	public Game()
 	{
@@ -25,7 +25,9 @@ public class Game : MMonolithGame
 			IsFullScreen = false,
 			IsMouseVisible = true,
 			IsFixedTimeStep = true,
-			IsVSyncEnabled = false
+			IsVSyncEnabled = true,
+			IsResizeAllowed = false,
+			IsBorderless = false
 		};
 	}
 
@@ -42,8 +44,8 @@ public class Game : MMonolithGame
 		MAssetManager.LoadTexture("player", @"images\player");
 
 		mainScene = new MScene();
-		MScene scene1 = new MScene();
-		MScene scene2 = new MScene();
+		scene1 = new MScene();
+		scene2 = new MScene();
 		
 		MNode n1 = new Player(){Position = new Vector2(100, 100), Name = "p1"};
 		MNode n2 = new Player(){Position = new Vector2(200, 200), Name = "p2"};
@@ -67,6 +69,7 @@ public class Game : MMonolithGame
 	protected override void Update(GameTime gameTime)
 	{
 		mainScene.Update(gameTime);
+		scene1.Update(gameTime);
 		
 		base.Update(gameTime);
 	}
@@ -78,6 +81,7 @@ public class Game : MMonolithGame
 		spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, null);
 
 		mainScene.Render(graphics, spriteBatch, gameTime);
+		scene1.Render(graphics, spriteBatch, gameTime);
 		
 		spriteBatch.End();
 		

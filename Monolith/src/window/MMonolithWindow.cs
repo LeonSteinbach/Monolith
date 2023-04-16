@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Monolith.window;
 
@@ -44,6 +45,7 @@ public class MMonolithWindow
 	}
 
 	private bool isCentered;
+
 	public bool IsCentered
 	{
 		get => isCentered;
@@ -127,22 +129,20 @@ public class MMonolithWindow
 		set
 		{
 			isBorderless = value;
-			if (value)
-			{
-				game.Window.IsBorderless = true;
-				game.Window.Position = new Point(0, 0);
-				game.graphics.PreferredBackBufferWidth = game.graphics.GraphicsDevice.DisplayMode.Width;
-				game.graphics.PreferredBackBufferHeight = game.graphics.GraphicsDevice.DisplayMode.Height;
-				game.graphics.ApplyChanges();
-			}
-			else
-			{
-				game.Window.IsBorderless = false;
-				game.Window.Position = position;
-				game.graphics.PreferredBackBufferWidth = size.X;
-				game.graphics.PreferredBackBufferHeight = size.Y;
-				game.graphics.ApplyChanges();
-			}
+			game.Window.IsBorderless = isBorderless;
+			game.graphics.ApplyChanges();
+		}
+	}
+	
+	private bool isResizeAllowed;
+	public bool IsResizeAllowed
+	{
+		get => isResizeAllowed;
+		set
+		{
+			isResizeAllowed = value;
+			game.Window.AllowUserResizing = isResizeAllowed;
+			game.graphics.ApplyChanges();
 		}
 	}
 

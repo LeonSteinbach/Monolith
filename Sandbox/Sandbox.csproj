@@ -12,10 +12,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.1.303" />
-    </ItemGroup>
-
-    <ItemGroup>
       <Folder Include="res\audio" />
       <Folder Include="res\images" />
     </ItemGroup>
@@ -26,6 +22,7 @@
 
     <ItemGroup>
         <PackageReference Include="MonoGame.Content.Builder" Version="3.7.0.9" />
+        <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.1.303" />
     </ItemGroup>
 
 </Project>

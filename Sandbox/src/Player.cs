@@ -8,7 +8,7 @@ namespace Sandbox;
 
 public class Player : MNode
 {
-	private MStaticSprite sprite;
+	private readonly MStaticSprite sprite;
 	
 	public Player()
 	{
@@ -22,12 +22,14 @@ public class Player : MNode
 
 	public override void Update(GameTime gameTime)
 	{
-		
+		Console.WriteLine($"update node: ${Name}");
+		Position += Vector2.One;
 	}
 
 	public override void Render(GraphicsDeviceManager graphics, SpriteBatch spriteBatch, GameTime gameTime)
 	{
-		
+		if (IsVisible)
+			sprite.Render(gameTime, spriteBatch);
 	}
 
 	public override void OnAddToScene(MScene scene)
@@ -42,6 +44,7 @@ public class Player : MNode
 
 	protected override void OnTransformChanged()
 	{
-		
+		Console.WriteLine($"transform: ${Position}");
+		sprite.Position = Position;
 	}
 }
