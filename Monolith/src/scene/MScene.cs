@@ -84,26 +84,39 @@ namespace Monolith.scene
 
         public List<T> GetNodes<T>(bool recursive = false) where T : MNode
         {
+            List<T> result = new List<T>();
+
             if (typeNodes.TryGetValue(typeof(T), out var nodesOfType))
             {
-                var result = new List<T>(nodesOfType.Count);
+                result = new List<T>(nodesOfType.Count);
                 result.AddRange(nodesOfType.Cast<T>());
-
-                if (recursive)
-                    foreach (var scene in ChildScenes)
-                        result.AddRange(scene.GetNodes<T>(true));
 
                 return result;
             }
+            
+            if (recursive)
+                foreach (var scene in ChildScenes)
+                    result.AddRange(scene.GetNodes<T>(true));
 
-            return new List<T>();
+            return result;
         }
 
         public T GetNamedNode<T>(string name, bool recursive = false) where T : MNode
         {
             if (namedNodes.TryGetValue(name, out var node) && node is T value)
                 return value;
-            return recursive ? ChildScenes.Select(scene => scene.GetNamedNode<T>(name, true)).FirstOrDefault() : null;
+            
+            if (recursive)
+            {
+                foreach (var scene in ChildScenes)
+                {
+                    var childNode = scene.GetNamedNode<T>(name, true);
+                    if (childNode != null)
+                        return childNode;
+                }
+            }
+
+            return null;
         }
 
     }

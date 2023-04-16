@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Monolith.scene;
-public abstract class MNode
+public class MNode
 {
     private Vector2 position = Vector2.Zero;
     private Vector2 scale = Vector2.One;
@@ -20,7 +20,10 @@ public abstract class MNode
 
     public MNode(Vector2 position, Vector2 scale, float rotation, string name = null)
     {
-        
+        this.position = position;
+        this.scale = scale;
+        this.rotation = rotation;
+        Name = name;
     }
 
     public Vector2 Position

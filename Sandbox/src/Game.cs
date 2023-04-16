@@ -55,7 +55,7 @@ public class Game : MMonolithGame
 		
 		mainScene.AddScene(scene1);
 		mainScene.AddScene(scene2);
-		
+
 		base.LoadContent();
 	}
 
