@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Monolith.scene;
-public class MNode
+public abstract class MNode
 {
     private Vector2 position = Vector2.Zero;
     private Vector2 scale = Vector2.One;
@@ -111,23 +111,13 @@ public class MNode
         Parent?.RemoveNode(this);
     }
 
-    public virtual void Update(GameTime gameTime)
-    {
-    }
+    public abstract void Update(GameTime gameTime);
 
-    public virtual void Render(GraphicsDeviceManager graphics, SpriteBatch spriteBatch, GameTime gameTime)
-    {
-    }
+    public abstract void Render(GraphicsDeviceManager graphics, SpriteBatch spriteBatch, GameTime gameTime);
 
-    public virtual void OnAddToScene(MScene scene)
-    {
-    }
+    public abstract void OnAddToScene(MScene scene);
 
-    public virtual void OnRemoveFromScene(MScene scene)
-    {
-    }
+    public abstract void OnRemoveFromScene(MScene scene);
 
-    protected virtual void OnTransformChanged()
-    {
-    }
+    protected abstract void OnTransformChanged();
 }

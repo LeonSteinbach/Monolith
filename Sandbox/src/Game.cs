@@ -45,9 +45,9 @@ public class Game : MMonolithGame
 		MScene scene1 = new MScene();
 		MScene scene2 = new MScene();
 		
-		MNode n1 = new MNode(new Vector2(100, 100), Vector2.One, 0f, "n1");
-		MNode n2 = new MNode(new Vector2(200, 200), Vector2.One, 0f, "n2");
-		MNode n3 = new MNode(new Vector2(300, 300), Vector2.One, 0f, "n3");
+		MNode n1 = new Player(){Position = new Vector2(100, 100), Name = "p1"};
+		MNode n2 = new Player(){Position = new Vector2(200, 200), Name = "p2"};
+		MNode n3 = new Player(){Position = new Vector2(300, 300), Name = "p3"};
 		
 		scene1.AddNode(n1);
 		scene1.AddNode(n2);
