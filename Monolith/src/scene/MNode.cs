@@ -20,9 +20,9 @@ public class MNode
 
     public MNode(Vector2 position, Vector2 scale, float rotation, string name = null)
     {
-        this.position = position;
-        this.scale = scale;
-        this.rotation = rotation;
+        Position = position;
+        Scale = scale;
+        Rotation = rotation;
         Name = name;
     }
 

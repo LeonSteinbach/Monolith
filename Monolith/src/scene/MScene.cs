@@ -82,9 +82,21 @@ namespace Monolith.scene
                 node.Render(graphics, spriteBatch, gameTime);
         }
 
-        public List<T> GetNodes<T>(bool recursive = false) where T : MNode
+        public List<MNode> GetAllNodes(bool recursive = false)
         {
-            List<T> result = new List<T>();
+            List<MNode> result = new ();
+            result.AddRange(nodes);
+
+            if (recursive)
+                foreach (var scene in ChildScenes)
+                    result.AddRange(scene.GetAllNodes(true));
+            
+            return result;
+        }
+
+        public List<T> GetTypedNodes<T>(bool recursive = false) where T : MNode
+        {
+            List<T> result = new ();
 
             if (typeNodes.TryGetValue(typeof(T), out var nodesOfType))
             {
@@ -96,7 +108,7 @@ namespace Monolith.scene
             
             if (recursive)
                 foreach (var scene in ChildScenes)
-                    result.AddRange(scene.GetNodes<T>(true));
+                    result.AddRange(scene.GetTypedNodes<T>(true));
 
             return result;
         }
