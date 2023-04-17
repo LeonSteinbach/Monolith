@@ -3,10 +3,11 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Monolith.assets;
 using Monolith.input;
+using Monolith.scene;
 
 namespace Monolith.graphics;
 
-public class MButton
+public class MButton : MNode
 {
 	private readonly MStaticSprite defaultSprite, hoverSprite;
 	private readonly string text;
@@ -30,9 +31,7 @@ public class MButton
 		this.font = font;
 		this.color = color;
 	}
-	
-	public Rectangle Rectangle => Hover() ? hoverSprite.Hitbox : defaultSprite.Hitbox;
-	
+
 	public bool Hover() => isHovering;
 
 	public bool Entered() => isHovering && !wasHovering;
@@ -40,11 +39,16 @@ public class MButton
 	public bool Left() => !isHovering && wasHovering;
 
 	public bool Pressed() => isPressed;
-	
-	public void Update()
+
+	public override Rectangle Hitbox()
+	{
+		return Hover() ? hoverSprite.Hitbox : defaultSprite.Hitbox;
+	}
+
+	public override void Update(GameTime gameTime)
 	{
 		wasHovering = isHovering;
-		isHovering = Rectangle.Contains(MInput.MousePosition());
+		isHovering = Hitbox().Contains(MInput.MousePosition());
 
 		isPressed = isHovering && MInput.IsLeftPressed();
 
@@ -62,7 +66,7 @@ public class MButton
 		}
 	}
 
-	public void Render(GameTime gameTime, SpriteBatch spriteBatch)
+	public override void Render(GraphicsDeviceManager graphics, SpriteBatch spriteBatch, GameTime gameTime)
 	{
 		MStaticSprite sprite = Hover() ? hoverSprite : defaultSprite;
 
@@ -71,5 +75,20 @@ public class MButton
 		if (!string.IsNullOrEmpty(text) && font != null)
 			spriteBatch.DrawString(font, text, sprite.Position, color, sprite.Rotation,
 				sprite.Origin, sprite.Scale, SpriteEffects.None, sprite.Layer);
+	}
+
+	public override void OnAddToScene(MScene scene)
+	{
+		
+	}
+
+	public override void OnRemoveFromScene(MScene scene)
+	{
+		
+	}
+
+	protected override void OnTransformChanged()
+	{
+		
 	}
 }

@@ -111,6 +111,8 @@ public abstract class MNode
         Parent?.RemoveNode(this);
     }
 
+    public abstract Rectangle Hitbox();
+
     public abstract void Update(GameTime gameTime);
 
     public abstract void Render(GraphicsDeviceManager graphics, SpriteBatch spriteBatch, GameTime gameTime);

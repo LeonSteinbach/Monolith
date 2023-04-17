@@ -15,6 +15,8 @@ public class Game : MMonolithGame
 
 	private MScene mainScene, scene1, scene2;
 
+	private MButton button;
+
 	public Game()
 	{
 		window = new MMonolithWindow(this)
@@ -47,13 +49,22 @@ public class Game : MMonolithGame
 		scene1 = new MScene();
 		scene2 = new MScene();
 		
-		MNode n1 = new Player(){Position = new Vector2(100, 100), Name = "p1"};
-		MNode n2 = new Player(){Position = new Vector2(200, 200), Name = "p2"};
-		MNode n3 = new Player(){Position = new Vector2(300, 300), Name = "p3"};
+		Player n1 = new Player(){Position = new Vector2(100, 100), Name = "p1"};
+		Player n2 = new Player(){Position = new Vector2(200, 200), Name = "p2"};
+		Player n3 = new Player(){Position = new Vector2(300, 300), Name = "p3"};
+
+		MStaticSprite s1 = new MStaticSprite(MAssetManager.GetTexture("player"))
+		{
+			Position = new Vector2(100, 100)
+		};
+		MStaticSprite s2 = new MStaticSprite(MAssetManager.GetTexture("player"))
+		{
+			Position = new Vector2(100, 100),
+			Scale = new Vector2(2, 2)
+		};
+		button = new MButton(s1, s2);
 		
-		scene1.AddNode(n1);
-		scene1.AddNode(n2);
-		scene2.AddNode(n3);
+		scene1.AddNode(button);
 		
 		mainScene.AddScene(scene1);
 		mainScene.AddScene(scene2);
@@ -71,6 +82,8 @@ public class Game : MMonolithGame
 		mainScene.Update(gameTime);
 		scene1.Update(gameTime);
 		
+		button.Update(gameTime);
+		
 		base.Update(gameTime);
 	}
 
@@ -82,7 +95,7 @@ public class Game : MMonolithGame
 
 		mainScene.Render(graphics, spriteBatch, gameTime);
 		scene1.Render(graphics, spriteBatch, gameTime);
-		
+
 		spriteBatch.End();
 		
 		base.Draw(gameTime);

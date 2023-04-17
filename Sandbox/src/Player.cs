@@ -20,9 +20,13 @@ public class Player : MNode
 		};
 	}
 
+	public override Rectangle Hitbox()
+	{
+		return sprite.Hitbox;
+	}
+
 	public override void Update(GameTime gameTime)
 	{
-		Console.WriteLine($"update node: ${Name}");
 		Position += Vector2.One;
 	}
 
@@ -44,7 +48,6 @@ public class Player : MNode
 
 	protected override void OnTransformChanged()
 	{
-		Console.WriteLine($"transform: ${Position}");
 		sprite.Position = Position;
 	}
 }
