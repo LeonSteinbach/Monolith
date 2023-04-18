@@ -160,7 +160,7 @@ public class Game : MMonolithGame
 
 		var b1 = new MButton(s14, s15);
 
-		var sl1 = new MSlider(s13, b1, -5, 5, 0, MSliderDirection.Vertical, null, null);
+		var sl1 = new MSlider(s13, b1, -5, 5, 0, MSliderDirection.Vertical);
 
 		var p1 = new Player()
 		{

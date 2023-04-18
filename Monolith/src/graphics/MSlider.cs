@@ -16,10 +16,8 @@ public enum MSliderDirection
 
 public class MSlider : MNode
 {
-	private readonly int startValue;
 	private readonly MSliderDirection direction;
 	private readonly int steps;
-	private readonly string hoverSound, clickSound;
 	
 	private int value;
 	
@@ -32,7 +30,7 @@ public class MSlider : MNode
 	public event Action<MSlider> OnValueChanged, OnMouseHover, OnMouseEntered, OnMouseLeft, OnMousePressed;
 
 	public MSlider(MStaticSprite background, MButton button, int minValue, int maxValue, int startValue,
-		MSliderDirection direction, string hoverSound, string clickSound, int steps = 0)
+		MSliderDirection direction, int steps = 0)
 	{
 		background.Name = "background";
 		button.Name = "button";
@@ -43,11 +41,8 @@ public class MSlider : MNode
 		MinValue = minValue;
 		MaxValue = maxValue;
 		
-		this.startValue = startValue;
 		this.direction = direction;
 		this.steps = steps;
-		this.hoverSound = hoverSound;
-		this.clickSound = clickSound;
 
 		button.Position = GetPositionFromValue(startValue);
 	}
@@ -119,21 +114,13 @@ public class MSlider : MNode
 			OnMouseHover?.Invoke(this);
 		
 		if (MouseEntered())
-		{
-			if (hoverSound != null)
-				MAudioManager.PlaySound(hoverSound);
 			OnMouseEntered?.Invoke(this);
-		}
 
 		if (MouseLeft())
 			OnMouseLeft?.Invoke(this);
 
 		if (MousePressed())
-		{
-			if (clickSound != null)
-				MAudioManager.PlaySound(clickSound);
 			OnMousePressed?.Invoke(this);
-		}
 
 		if (isButtonHold)
 		{
