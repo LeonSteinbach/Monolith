@@ -24,7 +24,7 @@ public class MText : MSprite
 		get
 		{
 			Point location = (Position - Origin * Scale).ToPoint();
-			Point size = MFontHelper.TextSize(Font, Text).ToPoint();
+			Point size = MFontHelper.TextSize(Font, Text).ToPoint() * Scale.ToPoint();
 
 			return new Rectangle(location, size);
 		}

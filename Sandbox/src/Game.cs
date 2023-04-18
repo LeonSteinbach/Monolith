@@ -4,7 +4,6 @@ using Monolith;
 using Monolith.assets;
 using Monolith.graphics;
 using Monolith.particles;
-using Monolith.scene;
 using Monolith.settings;
 using Monolith.window;
 
@@ -43,9 +42,12 @@ public class Game : MMonolithGame
 	protected override void LoadContent()
 	{
 		MAssetManager.LoadTexture("player", @"images\player");
+		MAssetManager.LoadTexture("cursor", @"images\cursor");
 		MAssetManager.LoadFont("arial", @"fonts\arial");
 		
 		var player = MTextureHelper.ScaleTexture(MAssetManager.GetTexture("player"), 2f, GraphicsDevice);
+		var cursor = MTextureHelper.ScaleTexture(MAssetManager.GetTexture("cursor"), 1f, GraphicsDevice);
+		var arial = MAssetManager.GetFont("arial");
 
 		mainScene = new MScene();
 		guiScene = new MScene();
@@ -175,16 +177,41 @@ public class Game : MMonolithGame
 			Position = new Vector2(100, 100)
 		};
 
-		var t2 = new MText("hallo", MAssetManager.GetFont("arial"))
+		var t2 = new MText("hallo", arial)
 		{
 			Position = new Vector2(700, 200),
 			Color = Color.Red,
 			Scale = new Vector2(3, 2)
 		};
+
+		var tbText = new MText("", arial)
+		{
+			Position = new Vector2(800, 300),
+			Color = Color.White,
+			Scale = new Vector2(5, 1)
+		};
+		
+		var tbPlaceholder = new MText("Your name", arial)
+		{
+			Position = new Vector2(800, 300),
+			Color = Color.Gray 
+		};
+
+		var tbBackground = new MStaticSprite(player)
+		{
+			Position = new Vector2(800, 300),
+			Scale = new Vector2(3)
+		};
+
+		var tbCursor = new MAnimatedSprite(cursor, 2, 1, 2, 500);
+
+		var tb1 = new MTextbox(tbBackground, tbText, tbCursor, tbPlaceholder, 10, true);
 		
 		guiScene.AddNode(sl1);
 		guiScene.AddNode(rg1);
 		guiScene.AddNode(t2);
+		guiScene.AddNode(tb1);
+		
 		playerScene.AddNode(p1);
 		
 		mainScene.AddNode(guiScene);
