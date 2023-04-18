@@ -41,23 +41,16 @@ public class MAnimatedSprite : MSprite
         {
             get
             {
-                if (Centered)
-                {
-                    return new Rectangle(
-                        (int)Position.X - texture.Width / 2,
-                        (int)Position.Y - texture.Height / 2,
-                        (int)(texture.Width * Scale.X),
-                        (int)(texture.Height * Scale.Y));              
-                }
-                return new Rectangle(
-                    (int)Position.X,
-                    (int)Position.Y,
-                    (int)(texture.Width * Scale.X),
-                    (int)(texture.Height * Scale.Y));
+                int width = (int)(frameWidth * Scale.X);
+                int height = (int)(frameHeight * Scale.Y);
+                int x = (int)(Position.X - Origin.X * Scale.X);
+                int y = (int)(Position.Y - Origin.Y * Scale.Y);
+
+                return new Rectangle(x, y, width, height);
             }
         }
 
-        public override Vector2 Origin => Centered ? Hitbox.Size.ToVector2() / 2 : Vector2.Zero;
+        public override Vector2 Origin => Centered ? new Vector2(frameWidth / 2f, frameHeight / 2f) : Vector2.Zero;
 
         public void Start()
         {
