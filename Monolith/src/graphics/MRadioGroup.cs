@@ -38,7 +38,9 @@ public class MRadioGroup : MNode
 		selectedButton = button;
 	}
 
-	public string SelectedText => selectedButton?.Text;
+	public string SelectedValue => selectedButton?.Value;
+	
+	public string SelectedText => selectedButton?.Text.Text;
 
 	public override Rectangle Hitbox => Rectangle.Empty;
 

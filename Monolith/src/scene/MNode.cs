@@ -115,19 +115,19 @@ public abstract class MNode
 
 	public virtual void OnTransformPosition()
 	{
-		foreach (var sprite in GetAllNodes<MNode>())
-			sprite.Position = Position;
+		foreach (var node in GetAllNodes<MNode>())
+			node.Position = Position;
 	}
 
 	public virtual void OnTransformRotation()
 	{
-		foreach (var sprite in GetAllNodes<MNode>())
-			sprite.Rotation = Rotation;
+		foreach (var node in GetAllNodes<MNode>())
+			node.Rotation = Rotation;
 	}
 
 	public virtual void OnTransformScale()
 	{
-		foreach (var sprite in GetAllNodes<MNode>())
-			sprite.Scale = Scale;
+		foreach (var node in GetAllNodes<MNode>())
+			node.Scale = Scale;
 	}
 }

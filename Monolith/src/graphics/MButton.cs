@@ -9,9 +9,6 @@ namespace Monolith.graphics;
 
 public class MButton : MNode
 {
-	private readonly string text;
-	private readonly SpriteFont font;
-	private readonly Color color;
 	private readonly string hoverSound, clickSound;
 
 	private bool isHovering, wasHovering;
@@ -19,8 +16,8 @@ public class MButton : MNode
 
 	public event Action<MButton> OnMouseHover, OnMouseEntered, OnMouseLeft, OnMousePressed; 
 
-	public MButton(MStaticSprite defaultSprite, MStaticSprite hoverSprite, string hoverSound = null, 
-		string clickSound = null, string text = null, SpriteFont font = null, Color color = default)
+	public MButton(MStaticSprite defaultSprite, MStaticSprite hoverSprite, MText text = null, string hoverSound = null, 
+		string clickSound = null, SpriteFont font = null, Color color = default)
 	{
 		defaultSprite.Name = "default";
 		hoverSprite.Name = "hover";
@@ -28,11 +25,14 @@ public class MButton : MNode
 		AddNode(defaultSprite);
 		AddNode(hoverSprite);
 		
+		if (text != null)
+		{
+			text.Name = "text";
+			AddNode(text);
+		}
+		
 		this.hoverSound = hoverSound;
 		this.clickSound = clickSound;
-		this.text = text;
-		this.font = font;
-		this.color = color;
 	}
 
 	public bool MouseHover() => isHovering;
@@ -46,6 +46,8 @@ public class MButton : MNode
 	public override Rectangle Hitbox => Sprite.Hitbox;
 
 	private MSprite Sprite => MouseHover() ? GetNode<MStaticSprite>("hover") : GetNode<MStaticSprite>("default");
+
+	public MText Text => GetNode<MText>("text");
 
 	public override void Update(GameTime gameTime)
 	{
@@ -77,13 +79,8 @@ public class MButton : MNode
 
 	public override void Render(GraphicsDeviceManager graphics, SpriteBatch spriteBatch, GameTime gameTime)
 	{
-		var sprite = Sprite;
-		
-		sprite.Render(graphics, spriteBatch, gameTime);
-
-		if (!string.IsNullOrEmpty(text) && font != null)
-			spriteBatch.DrawString(font, text, sprite.Position, color, sprite.Rotation,
-				sprite.Origin, sprite.Scale, SpriteEffects.None, sprite.Layer);
+		Sprite.Render(graphics, spriteBatch, gameTime);
+		Text?.Render(graphics, spriteBatch, gameTime);
 	}
 
 	public override void OnAddToNode(MNode parent) { }

@@ -43,6 +43,8 @@ public class Game : MMonolithGame
 	protected override void LoadContent()
 	{
 		MAssetManager.LoadTexture("player", @"images\player");
+		MAssetManager.LoadFont("arial", @"fonts\arial");
+		
 		var player = MTextureHelper.ScaleTexture(MAssetManager.GetTexture("player"), 2f, GraphicsDevice);
 
 		mainScene = new MScene();
@@ -157,8 +159,14 @@ public class Game : MMonolithGame
 		{
 			Color = Color.Magenta
 		};
+		
+		var t1 = new MText("button", MAssetManager.GetFont("arial"))
+		{
+			Position = s13.Position,
+			Color = Color.Yellow
+		};
 
-		var b1 = new MButton(s14, s15);
+		var b1 = new MButton(s14, s15, text: t1);
 
 		var sl1 = new MSlider(s13, b1, -5, 5, 0, MSliderDirection.Vertical);
 
@@ -166,9 +174,17 @@ public class Game : MMonolithGame
 		{
 			Position = new Vector2(100, 100)
 		};
+
+		var t2 = new MText("hallo", MAssetManager.GetFont("arial"))
+		{
+			Position = new Vector2(700, 200),
+			Color = Color.Red,
+			Scale = new Vector2(3, 2)
+		};
 		
 		guiScene.AddNode(sl1);
 		guiScene.AddNode(rg1);
+		guiScene.AddNode(t2);
 		playerScene.AddNode(p1);
 		
 		mainScene.AddNode(guiScene);

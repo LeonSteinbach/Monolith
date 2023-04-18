@@ -18,7 +18,7 @@ namespace Monolith.graphics
         public event Action<MCheckbox> OnChecked, OnUnchecked, OnMouseHover, OnMouseEntered, OnMouseLeft, OnMousePressed;
 
         public MCheckbox(MStaticSprite uncheckedSprite, MStaticSprite hoverUncheckedSprite, MStaticSprite checkedSprite,
-            MStaticSprite hoverCheckedSprite, bool isChecked, string hoverSound = null, string clickSound = null)
+            MStaticSprite hoverCheckedSprite, bool isChecked, MText text = null, string hoverSound = null, string clickSound = null)
         {
             uncheckedSprite.Name = "unchecked";
             hoverUncheckedSprite.Name = "hoverUnchecked";
@@ -30,6 +30,12 @@ namespace Monolith.graphics
             AddNode(checkedSprite);
             AddNode(hoverCheckedSprite);
             
+            if (text != null)
+            {
+                text.Name = "text";
+                AddNode(text);
+            }
+            
             this.hoverSound = hoverSound;
             this.clickSound = clickSound;
             this.isChecked = isChecked;
@@ -38,6 +44,8 @@ namespace Monolith.graphics
         private MSprite Sprite => MouseHover() ? 
             (isChecked ? GetNode<MStaticSprite>("hoverChecked") : GetNode<MStaticSprite>("hoverUnchecked")) :
             (isChecked ? GetNode<MStaticSprite>("checked") : GetNode<MStaticSprite>("unchecked"));
+        
+        public MText Text => GetNode<MText>("text");
 
         public bool MouseHover() => isHovering;
 
@@ -89,6 +97,7 @@ namespace Monolith.graphics
         public override void Render(GraphicsDeviceManager graphics, SpriteBatch spriteBatch, GameTime gameTime)
         {
             Sprite.Render(graphics, spriteBatch, gameTime);
+            Text?.Render(graphics, spriteBatch, gameTime);
         }
 
         public override void OnAddToNode(MNode parent) { }
