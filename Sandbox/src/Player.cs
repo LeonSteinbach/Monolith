@@ -20,34 +20,45 @@ public class Player : MNode
 		};
 	}
 
-	public override Rectangle Hitbox()
-	{
-		return sprite.Hitbox;
-	}
+	public override Rectangle Hitbox => sprite.Hitbox;
 
 	public override void Update(GameTime gameTime)
 	{
 		Position += Vector2.One;
+		
+		UpdateChildren(gameTime);
 	}
 
 	public override void Render(GraphicsDeviceManager graphics, SpriteBatch spriteBatch, GameTime gameTime)
 	{
 		if (IsVisible)
-			sprite.Render(gameTime, spriteBatch);
+			sprite.Render(graphics, spriteBatch, gameTime);
+		
+		RenderChildren(graphics, spriteBatch, gameTime);
 	}
 
-	public override void OnAddToScene(MScene scene)
+	public override void OnAddToNode(MNode parent)
 	{
 		
 	}
 
-	public override void OnRemoveFromScene(MScene scene)
+	public override void OnRemoveFromNode(MNode parent)
 	{
 		
 	}
 
-	protected override void OnTransformChanged()
+	public override void OnTransformPosition()
 	{
 		sprite.Position = Position;
+	}
+	
+	public override void OnTransformRotation()
+	{
+		sprite.Rotation = Rotation;
+	}
+	
+	public override void OnTransformScale()
+	{
+		sprite.Scale = Scale;
 	}
 }

@@ -3,78 +3,96 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Monolith.assets;
 using Monolith.input;
+using Monolith.scene;
 
 namespace Monolith.graphics
 {
-    public class MCheckbox
+    public class MCheckbox : MNode
     {
-        private readonly MStaticSprite defaultSprite, hoverUncheckedSprite, checkedSprite, hoverCheckedSprite;
         private readonly string hoverSound, clickSound;
         
         private bool isHovering, wasHovering;
         private bool isPressed;
         private bool isChecked;
         
-        public event Action<MCheckbox> OnChecked;
-        public event Action<MCheckbox> OnUnChecked;
+        public event Action<MCheckbox> OnChecked, OnUnchecked, OnMouseHover, OnMouseEntered, OnMouseLeft, OnMousePressed;
 
-        public MCheckbox(MStaticSprite defaultSprite, MStaticSprite hoverUncheckedSprite, MStaticSprite checkedSprite,
+        public MCheckbox(MStaticSprite uncheckedSprite, MStaticSprite hoverUncheckedSprite, MStaticSprite checkedSprite,
             MStaticSprite hoverCheckedSprite, bool isChecked, string hoverSound = null, string clickSound = null)
         {
-            this.defaultSprite = defaultSprite ?? throw new ArgumentNullException(nameof(defaultSprite));
-            this.hoverUncheckedSprite = hoverUncheckedSprite ?? throw new ArgumentNullException(nameof(hoverUncheckedSprite));
-            this.checkedSprite = checkedSprite ?? throw new ArgumentNullException(nameof(checkedSprite));
-            this.hoverCheckedSprite = hoverCheckedSprite ?? throw new ArgumentNullException(nameof(hoverCheckedSprite));
+            uncheckedSprite.Name = "unchecked";
+            hoverUncheckedSprite.Name = "hoverUnchecked";
+            checkedSprite.Name = "checked";
+            hoverCheckedSprite.Name = "hoverChecked";
+		
+            AddNode(uncheckedSprite);
+            AddNode(hoverUncheckedSprite);
+            AddNode(checkedSprite);
+            AddNode(hoverCheckedSprite);
+            
             this.hoverSound = hoverSound;
             this.clickSound = clickSound;
             this.isChecked = isChecked;
         }
+        
+        private MSprite Sprite => MouseHover() ? 
+            (isChecked ? GetNode<MStaticSprite>("hoverChecked") : GetNode<MStaticSprite>("hoverUnchecked")) :
+            (isChecked ? GetNode<MStaticSprite>("checked") : GetNode<MStaticSprite>("unchecked"));
 
-        public Rectangle Rectangle => Hover() ? (isChecked ? hoverCheckedSprite.Hitbox : hoverUncheckedSprite.Hitbox) :
-                                               (isChecked ? checkedSprite.Hitbox : defaultSprite.Hitbox);
+        public bool MouseHover() => isHovering;
 
-        public bool Hover() => isHovering;
+        public bool MouseEntered() => isHovering && !wasHovering;
 
-        public bool Entered() => isHovering && !wasHovering;
+        public bool MouseLeft() => !isHovering && wasHovering;
 
-        public bool Left() => !isHovering && wasHovering;
-
-        public bool Pressed() => isPressed;
+        public bool MousePressed() => isPressed;
 
         public bool IsChecked() => isChecked;
+        
+        public override Rectangle Hitbox => Sprite.Hitbox;
 
-        public void Update()
+        public override void Update(GameTime gameTime)
         {
             wasHovering = isHovering;
-            isHovering = Rectangle.Contains(MInput.MousePosition());
+            isHovering = Hitbox.Contains(MInput.MousePosition());
 
             isPressed = isHovering && MInput.IsLeftPressed();
 
-            if (Entered() && hoverSound != null)
+            if (MouseHover())
+                OnMouseHover?.Invoke(this);
+            
+            if (MouseEntered())
             {
-                MAudioManager.PlaySound(hoverSound);
+                if (hoverSound != null)
+                    MAudioManager.PlaySound(hoverSound);
+                OnMouseEntered?.Invoke(this);
             }
+            
+            if (MouseLeft())
+                OnMouseLeft?.Invoke(this);
 
-            if (Pressed())
+            if (MousePressed())
             {
                 if (clickSound != null)
                     MAudioManager.PlaySound(clickSound);
                 isChecked = !isChecked;
                 
+                OnMousePressed?.Invoke(this);
+                
                 if (isChecked)
                     OnChecked?.Invoke(this);
                 else
-                    OnUnChecked?.Invoke(this);
+                    OnUnchecked?.Invoke(this);
             }
         }
 
-        public void Render(GameTime gameTime, SpriteBatch spriteBatch)
+        public override void Render(GraphicsDeviceManager graphics, SpriteBatch spriteBatch, GameTime gameTime)
         {
-            MStaticSprite sprite = Hover() ?
-                (isChecked ? hoverCheckedSprite : hoverUncheckedSprite) : 
-                (isChecked ? checkedSprite : defaultSprite);
-
-            sprite.Render(gameTime, spriteBatch);
+            Sprite.Render(graphics, spriteBatch, gameTime);
         }
+
+        public override void OnAddToNode(MNode parent) { }
+
+        public override void OnRemoveFromNode(MNode parent) { }
     }
 }

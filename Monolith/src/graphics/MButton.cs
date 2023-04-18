@@ -9,7 +9,6 @@ namespace Monolith.graphics;
 
 public class MButton : MNode
 {
-	private readonly MStaticSprite defaultSprite, hoverSprite;
 	private readonly string text;
 	private readonly SpriteFont font;
 	private readonly Color color;
@@ -18,13 +17,17 @@ public class MButton : MNode
 	private bool isHovering, wasHovering;
 	private bool isPressed;
 
-	public event Action<MButton> OnPressed; 
+	public event Action<MButton> OnMouseHover, OnMouseEntered, OnMouseLeft, OnMousePressed; 
 
 	public MButton(MStaticSprite defaultSprite, MStaticSprite hoverSprite, string hoverSound = null, 
 		string clickSound = null, string text = null, SpriteFont font = null, Color color = default)
 	{
-		this.defaultSprite = defaultSprite ?? throw new ArgumentNullException(nameof(defaultSprite));
-		this.hoverSprite = hoverSprite ?? throw new ArgumentNullException(nameof(hoverSprite));
+		defaultSprite.Name = "default";
+		hoverSprite.Name = "hover";
+		
+		AddNode(defaultSprite);
+		AddNode(hoverSprite);
+		
 		this.hoverSound = hoverSound;
 		this.clickSound = clickSound;
 		this.text = text;
@@ -32,63 +35,58 @@ public class MButton : MNode
 		this.color = color;
 	}
 
-	public bool Hover() => isHovering;
+	public bool MouseHover() => isHovering;
 
-	public bool Entered() => isHovering && !wasHovering;
+	public bool MouseEntered() => isHovering && !wasHovering;
 
-	public bool Left() => !isHovering && wasHovering;
+	public bool MouseLeft() => !isHovering && wasHovering;
 
-	public bool Pressed() => isPressed;
+	public bool MousePressed() => isPressed;
 
-	public override Rectangle Hitbox()
-	{
-		return Hover() ? hoverSprite.Hitbox : defaultSprite.Hitbox;
-	}
+	public override Rectangle Hitbox => Sprite.Hitbox;
+
+	private MSprite Sprite => MouseHover() ? GetNode<MStaticSprite>("hover") : GetNode<MStaticSprite>("default");
 
 	public override void Update(GameTime gameTime)
 	{
 		wasHovering = isHovering;
-		isHovering = Hitbox().Contains(MInput.MousePosition());
+		isHovering = Hitbox.Contains(MInput.MousePosition());
 
 		isPressed = isHovering && MInput.IsLeftPressed();
 
-		if (Entered() && hoverSound != null)
+		if (MouseHover())
+			OnMouseHover?.Invoke(this);
+		
+		if (MouseEntered())
 		{
-			MAudioManager.PlaySound(hoverSound);
+			if (hoverSound != null)
+				MAudioManager.PlaySound(hoverSound);
+			OnMouseEntered?.Invoke(this);
 		}
+		
+		if (MouseLeft())
+			OnMouseLeft?.Invoke(this);
 
-		if (Pressed())
+		if (MousePressed())
 		{
 			if (clickSound != null)
 				MAudioManager.PlaySound(clickSound);
-			
-			OnPressed?.Invoke(this);
+			OnMousePressed?.Invoke(this);
 		}
 	}
 
 	public override void Render(GraphicsDeviceManager graphics, SpriteBatch spriteBatch, GameTime gameTime)
 	{
-		MStaticSprite sprite = Hover() ? hoverSprite : defaultSprite;
-
-		sprite.Render(gameTime, spriteBatch);
+		var sprite = Sprite;
+		
+		sprite.Render(graphics, spriteBatch, gameTime);
 
 		if (!string.IsNullOrEmpty(text) && font != null)
 			spriteBatch.DrawString(font, text, sprite.Position, color, sprite.Rotation,
 				sprite.Origin, sprite.Scale, SpriteEffects.None, sprite.Layer);
 	}
 
-	public override void OnAddToScene(MScene scene)
-	{
-		
-	}
+	public override void OnAddToNode(MNode parent) { }
 
-	public override void OnRemoveFromScene(MScene scene)
-	{
-		
-	}
-
-	protected override void OnTransformChanged()
-	{
-		
-	}
+	public override void OnRemoveFromNode(MNode parent) { }
 }

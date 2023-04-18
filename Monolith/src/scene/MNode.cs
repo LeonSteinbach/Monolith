@@ -1,125 +1,133 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Monolith.scene;
+
 public abstract class MNode
 {
-    private Vector2 position = Vector2.Zero;
-    private Vector2 scale = Vector2.One;
-    private float rotation;
+	private Vector2 position = Vector2.Zero;
+	private Vector2 scale = Vector2.One;
+	private float rotation;
+	
+	private readonly List<MNode> nodes = new();
+	
+	public string Name { get; set; }
 
-    public string Name { get; set; }
-    public bool IsVisible { get; set; } = true;
-    public MScene Parent { get; internal set; }
-    public MLayer Layer { get; set; }
+	public bool IsVisible { get; set; } = true;
+	public MNode Parent { get; private set; }
+	
+	public abstract Rectangle Hitbox { get; }
 
-    public MNode()
-    {
-        
-    }
+	public Vector2 Position
+	{
+		get => position;
+		set
+		{
+			position = value;
+			OnTransformPosition();
+		}
+	}
 
-    public MNode(Vector2 position, Vector2 scale, float rotation, string name = null)
-    {
-        Position = position;
-        Scale = scale;
-        Rotation = rotation;
-        Name = name;
-    }
+	public float Rotation
+	{
+		get => rotation;
+		set
+		{
+			rotation = value;
+			OnTransformRotation();
+		}
+	}
 
-    public Vector2 Position
-    {
-        get => position;
-        set
-        {
-            position = value;
-            OnTransformChanged();
-        }
-    }
+	public Vector2 Scale
+	{
+		get => scale;
+		set
+		{
+			scale = value;
+			OnTransformScale();
+		}
+	}
+	
+	public void AddNode(MNode node)
+	{
+		node.Parent = this;
+		nodes.Add(node);
+		node.OnAddToNode(this);
+	}
 
-    public float Rotation
-    {
-        get => rotation;
-        set
-        {
-            rotation = value;
-            OnTransformChanged();
-        }
-    }
+	public void RemoveNode(MNode node)
+	{
+		node.Parent = null;
+		nodes.Remove(node);
+		node.OnRemoveFromNode(this);
+	}
 
-    public Vector2 Scale
-    {
-        get => scale;
-        set
-        {
-            scale = value;
-            OnTransformChanged();
-        }
-    }
+	public abstract void Update(GameTime gameTime);
 
-    public Vector2 GlobalPosition
-    {
-        get
-        {
-            var result = Position;
-            var parent = Parent;
-            while (parent != null)
-            {
-                result += parent.Position;
-                parent = parent.Parent;
-            }
-            return result;
-        }
-    }
+	public void UpdateChildren(GameTime gameTime)
+	{
+		foreach (var node in nodes)
+			node.Update(gameTime);
+	}
 
-    public float GlobalRotation
-    {
-        get
-        {
-            var result = Rotation;
-            var parent = Parent;
-            while (parent != null)
-            {
-                result += parent.Rotation;
-                parent = parent.Parent;
-            }
-            return result;
-        }
-    }
+	public abstract void Render(GraphicsDeviceManager graphics, SpriteBatch spriteBatch, GameTime gameTime);
 
-    public Vector2 GlobalScale
-    {
-        get
-        {
-            var result = Scale;
-            var parent = Parent;
-            while (parent != null)
-            {
-                result *= parent.Scale;
-                parent = parent.Parent;
-            }
-            return result;
-        }
-    }
+	public void RenderChildren(GraphicsDeviceManager graphics, SpriteBatch spriteBatch, GameTime gameTime)
+	{
+		foreach (var node in nodes)
+			node.Render(graphics, spriteBatch, gameTime);
+	}
+	
+	public T GetNode<T>(string name) where T : MNode
+	{
+		if (this is T && Name == name)
+			return (T)this;
 
-    public void AddToScene(MScene scene)
-    {
-        scene.AddNode(this);
-    }
+		foreach (var node in nodes)
+		{
+			var result = node.GetNode<T>(name);
+			if (result != null)
+				return result;
+		}
 
-    public void RemoveFromScene()
-    {
-        Parent?.RemoveNode(this);
-    }
+		return null;
+	}
 
-    public abstract Rectangle Hitbox();
+	public List<T> GetAllNodes<T>() where T : MNode
+	{
+		var result = new List<T>();
 
-    public abstract void Update(GameTime gameTime);
+		foreach (var node in nodes)
+		{
+			if (node is T tNode)
+				result.Add(tNode);
+			result.AddRange(node.GetAllNodes<T>());
+		}
 
-    public abstract void Render(GraphicsDeviceManager graphics, SpriteBatch spriteBatch, GameTime gameTime);
+		return result;
+	}
 
-    public abstract void OnAddToScene(MScene scene);
 
-    public abstract void OnRemoveFromScene(MScene scene);
+	public abstract void OnAddToNode(MNode parent);
+	
+	public abstract void OnRemoveFromNode(MNode parent);
 
-    protected abstract void OnTransformChanged();
+	public virtual void OnTransformPosition()
+	{
+		foreach (var sprite in GetAllNodes<MNode>())
+			sprite.Position = Position;
+	}
+
+	public virtual void OnTransformRotation()
+	{
+		foreach (var sprite in GetAllNodes<MNode>())
+			sprite.Rotation = Rotation;
+	}
+
+	public virtual void OnTransformScale()
+	{
+		foreach (var sprite in GetAllNodes<MNode>())
+			sprite.Scale = Scale;
+	}
 }

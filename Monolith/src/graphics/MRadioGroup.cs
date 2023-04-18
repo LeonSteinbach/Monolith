@@ -1,18 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Monolith.scene;
 
 namespace Monolith.graphics;
 
-public class MRadioGroup
+public class MRadioGroup : MNode
 {
-	private readonly List<MRadioButton> radioButtons = new ();
 	private MRadioButton selectedButton;
 
 	public void AddButton(MRadioButton button)
 	{
-		radioButtons.Add(button);
+		AddNode(button);
 
 		if (button.IsSelected())
 		{
@@ -26,7 +25,9 @@ public class MRadioGroup
 
 	private void RadioButtonSelected(MRadioButton button)
 	{
-		foreach (MRadioButton otherButton in radioButtons)
+		var a = GetAllNodes<MNode>();
+		
+		foreach (MRadioButton otherButton in GetAllNodes<MRadioButton>())
 		{
 			if (otherButton != button)
 			{
@@ -37,24 +38,21 @@ public class MRadioGroup
 		selectedButton = button;
 	}
 
-	public string GetSelectedText()
+	public string SelectedText => selectedButton?.Text;
+
+	public override Rectangle Hitbox => Rectangle.Empty;
+
+	public override void Update(GameTime gameTime)
 	{
-		return selectedButton?.Text;
+		UpdateChildren(gameTime);
 	}
 
-	public void Update()
+	public override void Render(GraphicsDeviceManager graphics, SpriteBatch spriteBatch, GameTime gameTime)
 	{
-		foreach (MRadioButton button in radioButtons)
-		{
-			button.Update();
-		}
+		RenderChildren(graphics, spriteBatch, gameTime);
 	}
 
-	public void Render(GameTime gameTime, SpriteBatch spriteBatch)
-	{
-		foreach (MRadioButton button in radioButtons)
-		{
-			button.Render(gameTime, spriteBatch);
-		}
-	}
+	public override void OnAddToNode(MNode parent) { }
+
+	public override void OnRemoveFromNode(MNode parent) { }
 }

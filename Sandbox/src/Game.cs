@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Monolith;
 using Monolith.assets;
 using Monolith.graphics;
+using Monolith.particles;
 using Monolith.scene;
 using Monolith.settings;
 using Monolith.window;
@@ -13,9 +14,7 @@ public class Game : MMonolithGame
 {
 	private MMonolithWindow window;
 
-	private MScene mainScene, scene1, scene2;
-
-	private MButton button;
+	private MScene mainScene, guiScene, playerScene;
 
 	public Game()
 	{
@@ -44,30 +43,136 @@ public class Game : MMonolithGame
 	protected override void LoadContent()
 	{
 		MAssetManager.LoadTexture("player", @"images\player");
+		var player = MTextureHelper.ScaleTexture(MAssetManager.GetTexture("player"), 2f, GraphicsDevice);
 
 		mainScene = new MScene();
-		scene1 = new MScene();
-		scene2 = new MScene();
-		
-		Player n1 = new Player(){Position = new Vector2(100, 100), Name = "p1"};
-		Player n2 = new Player(){Position = new Vector2(200, 200), Name = "p2"};
-		Player n3 = new Player(){Position = new Vector2(300, 300), Name = "p3"};
+		guiScene = new MScene();
+		playerScene = new MScene();
 
-		MStaticSprite s1 = new MStaticSprite(MAssetManager.GetTexture("player"))
+		var s1 = new MStaticSprite(player)
+		{
+			Position = new Vector2(200, 200),
+			Color = Color.Red
+		};
+		
+		var s2 = new MStaticSprite(player)
+		{
+			Position = new Vector2(200, 200),
+			Color = Color.Green
+		};
+		
+		var s3 = new MStaticSprite(player)
+		{
+			Position = new Vector2(200, 200),
+			Color = Color.Blue
+		};
+		
+		var s4 = new MStaticSprite(player)
+		{
+			Position = new Vector2(200, 200),
+			Color = Color.Yellow
+		};
+		
+		var s5 = new MStaticSprite(player)
+		{
+			Position = new Vector2(200, 400),
+			Color = Color.Red
+		};
+		
+		var s6 = new MStaticSprite(player)
+		{
+			Position = new Vector2(200, 400),
+			Color = Color.Green
+		};
+		
+		var s7 = new MStaticSprite(player)
+		{
+			Position = new Vector2(200, 400),
+			Color = Color.Blue
+		};
+		
+		var s8 = new MStaticSprite(player)
+		{
+			Position = new Vector2(200, 400),
+			Color = Color.Yellow
+		};
+		
+		var s9 = new MStaticSprite(player)
+		{
+			Position = new Vector2(200, 600),
+			Color = Color.Red
+		};
+		
+		var s10 = new MStaticSprite(player)
+		{
+			Position = new Vector2(200, 600),
+			Color = Color.Green
+		};
+		
+		var s11 = new MStaticSprite(player)
+		{
+			Position = new Vector2(200, 600),
+			Color = Color.Blue
+		};
+		
+		var s12 = new MStaticSprite(player)
+		{
+			Position = new Vector2(200, 600),
+			Color = Color.Yellow
+		};
+		
+		var rb1 = new MRadioButton(s1, s2, s3, s4, isChecked: false)
+		{
+			Name = "radio1"
+		};
+		
+		var rb2 = new MRadioButton(s5, s6, s7, s8, isChecked: true)
+		{
+			Name = "radio2"
+		};
+		
+		var rb3 = new MRadioButton(s9, s10, s11, s12, isChecked: false)
+		{
+			Name = "radio3"
+		};
+
+		var rg1 = new MRadioGroup();
+		rg1.AddButton(rb1);
+		rg1.AddButton(rb2);
+		rg1.AddButton(rb3);
+
+		var s13 = new MStaticSprite(player)
+		{
+			Position = new Vector2(500, 200),
+			Scale = new Vector2(5, 5),
+			Color = Color.Wheat
+		};
+
+		var s14 = new MStaticSprite(player)
+		{
+			Color = Color.Yellow
+		};
+		
+		var s15 = new MStaticSprite(player)
+		{
+			Color = Color.Magenta
+		};
+
+		var b1 = new MButton(s14, s15);
+
+		var sl1 = new MSlider(s13, b1, -5, 5, 0, MSliderDirection.Vertical, null, null);
+
+		var p1 = new Player()
 		{
 			Position = new Vector2(100, 100)
 		};
-		MStaticSprite s2 = new MStaticSprite(MAssetManager.GetTexture("player"))
-		{
-			Position = new Vector2(100, 100),
-			Scale = new Vector2(2, 2)
-		};
-		button = new MButton(s1, s2);
 		
-		scene1.AddNode(button);
+		guiScene.AddNode(sl1);
+		guiScene.AddNode(rg1);
+		playerScene.AddNode(p1);
 		
-		mainScene.AddScene(scene1);
-		mainScene.AddScene(scene2);
+		mainScene.AddNode(guiScene);
+		mainScene.AddNode(playerScene);
 
 		base.LoadContent();
 	}
@@ -80,9 +185,6 @@ public class Game : MMonolithGame
 	protected override void Update(GameTime gameTime)
 	{
 		mainScene.Update(gameTime);
-		scene1.Update(gameTime);
-		
-		button.Update(gameTime);
 		
 		base.Update(gameTime);
 	}
@@ -94,8 +196,7 @@ public class Game : MMonolithGame
 		spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, null);
 
 		mainScene.Render(graphics, spriteBatch, gameTime);
-		scene1.Render(graphics, spriteBatch, gameTime);
-
+		
 		spriteBatch.End();
 		
 		base.Draw(gameTime);

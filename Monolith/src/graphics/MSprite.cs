@@ -1,22 +1,18 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Monolith.scene;
 
 namespace Monolith.graphics
 {
-    public interface IMSprite
+    public abstract class MSprite : MNode
     {
-        public Vector2 Position { get; set; }
-        public bool Centered { get; set; }
-        public Color Color { get; set; }
-        public float Rotation { get; set; }
-        public Vector2 Scale { get; set; }
-        public float Layer { get; set; }
-        public Rectangle Hitbox { get; }
-        public Vector2 Origin { get; }
-        public void Render(GameTime gameTime, SpriteBatch spriteBatch);
+        public abstract bool Centered { get; set; }
+        public abstract Color Color { get; set; }
+        public abstract float Layer { get; set; }
+        public abstract Vector2 Origin { get; }
     }
 
-    public class MAnimatedSprite : IMSprite
+    public class MAnimatedSprite : MSprite
     {
         private readonly Texture2D texture;
         private readonly int columns;
@@ -28,12 +24,9 @@ namespace Monolith.graphics
         public bool Playing { get; private set; }
         public bool Looping { get; set; }
         public bool Flipped { get; set; }
-        public Vector2 Position { get; set; }
-        public bool Centered { get; set; } = true;
-        public Color Color { get; set; } = Color.White;
-        public float Rotation { get; set; }
-        public Vector2 Scale { get; set; } = Vector2.One;
-        public float Layer { get; set; }
+        public override bool Centered { get; set; } = true;
+        public override Color Color { get; set; } = Color.White;
+        public override float Layer { get; set; }
 
         public MAnimatedSprite(Texture2D texture, int columns, int rows, int frames, int delay, bool looping = true, bool flipped = false)
         {
@@ -52,7 +45,7 @@ namespace Monolith.graphics
             Flipped = flipped;
         }
 
-        public Rectangle Hitbox
+        public override Rectangle Hitbox
         {
             get
             {
@@ -72,7 +65,7 @@ namespace Monolith.graphics
             }
         }
 
-        public Vector2 Origin => Centered ? Hitbox.Size.ToVector2() / 2 : Vector2.Zero;
+        public override Vector2 Origin => Centered ? Hitbox.Size.ToVector2() / 2 : Vector2.Zero;
 
         public void Start()
         {
@@ -102,15 +95,8 @@ namespace Monolith.graphics
             frameWidth,
             frameHeight);
 
-        public void Render(GameTime gameTime, SpriteBatch spriteBatch)
+        public override void Update(GameTime gameTime)
         {
-            if (!Playing)
-                return;
-
-            SpriteEffects effect = Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
-
-            spriteBatch.Draw(texture, Position, SourceRectangle, Color, Rotation, Origin, Scale, effect, Layer);
-
             elapsed += gameTime.ElapsedGameTime.TotalMilliseconds;
             if (elapsed >= delay)
             {
@@ -129,17 +115,32 @@ namespace Monolith.graphics
                 elapsed = 0d;
             }
         }
+
+        public override void Render(GraphicsDeviceManager graphics, SpriteBatch spriteBatch, GameTime gameTime)
+        {
+            if (!Playing) return;
+
+            SpriteEffects effect = Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+            spriteBatch.Draw(texture, Position, SourceRectangle, Color, Rotation, Origin, Scale, effect, Layer);
+        }
+
+        public override void OnAddToNode(MNode parent) { }
+
+        public override void OnRemoveFromNode(MNode parent) { }
+
+        public override void OnTransformPosition() { }
+
+        public override void OnTransformRotation() { }
+
+        public override void OnTransformScale() { }
     }
 
-    public class MStaticSprite : IMSprite
+    public class MStaticSprite : MSprite
     {
         private readonly Texture2D texture;
-        public Vector2 Position { get; set; }
-        public bool Centered { get; set; } = true;
-        public Color Color { get; set; } = Color.White;
-        public float Rotation { get; set; }
-        public Vector2 Scale { get; set; } = Vector2.One;
-        public float Layer { get; set; }
+        public override bool Centered { get; set; } = true;
+        public override Color Color { get; set; } = Color.White;
+        public override float Layer { get; set; }
 
         public MStaticSprite(Texture2D texture)
         {
@@ -147,7 +148,7 @@ namespace Monolith.graphics
             Position = Vector2.Zero;
         }
         
-        public Rectangle Hitbox
+        public override Rectangle Hitbox
         {
             get
             {
@@ -160,11 +161,23 @@ namespace Monolith.graphics
             }
         }
 
-        public Vector2 Origin => Centered ? texture.Bounds.Size.ToVector2() / 2 : Vector2.Zero;
+        public override Vector2 Origin => Centered ? texture.Bounds.Size.ToVector2() / 2 : Vector2.Zero;
 
-        public void Render(GameTime gameTime, SpriteBatch spriteBatch)
+        public override void Update(GameTime gameTime) { }
+
+        public override void Render(GraphicsDeviceManager graphics, SpriteBatch spriteBatch, GameTime gameTime)
         {
-            spriteBatch.Draw(texture, Position, null, Color.Red, Rotation, Origin, Scale, SpriteEffects.None, Layer);
+            spriteBatch.Draw(texture, Position, null, Color, Rotation, Origin, Scale, SpriteEffects.None, Layer);
         }
+
+        public override void OnAddToNode(MNode parent) { }
+
+        public override void OnRemoveFromNode(MNode parent) { }
+
+        public override void OnTransformPosition() { }
+
+        public override void OnTransformRotation() { }
+
+        public override void OnTransformScale() { }
     }
 }
