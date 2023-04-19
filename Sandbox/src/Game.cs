@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Monolith;
 using Monolith.assets;
 using Monolith.graphics;
-using Monolith.particles;
+using Monolith.scene;
 using Monolith.settings;
 using Monolith.window;
 

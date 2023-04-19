@@ -125,6 +125,8 @@ public class MProgressBar : MNode
 
 	public override void Render(GraphicsDeviceManager graphics, SpriteBatch spriteBatch, GameTime gameTime)
 	{
+		if (!IsVisible) return;
+		
 		Background.Render(graphics, spriteBatch, gameTime);
 		Foreground.Render(graphics, spriteBatch, gameTime);
 		Text?.Render(graphics, spriteBatch, gameTime);

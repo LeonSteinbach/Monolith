@@ -105,6 +105,8 @@ public class MTextbox : MNode
 
 	public override void Render(GraphicsDeviceManager graphics, SpriteBatch spriteBatch, GameTime gameTime)
 	{
+		if (!IsVisible) return;
+		
 		Background.Render(graphics, spriteBatch, gameTime);
 		
 		if (Text.Text.Length > 0)

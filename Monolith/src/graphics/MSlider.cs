@@ -153,6 +153,8 @@ public class MSlider : MNode
 
 	public override void Render(GraphicsDeviceManager graphics, SpriteBatch spriteBatch, GameTime gameTime)
 	{
+		if (!IsVisible) return;
+		
 		RenderChildren(graphics, spriteBatch, gameTime);
 	}
 

@@ -38,6 +38,8 @@ public class MText : MSprite
 
 	public override void Render(GraphicsDeviceManager graphics, SpriteBatch spriteBatch, GameTime gameTime)
 	{
+		if (!IsVisible) return;
+		
 		spriteBatch.DrawString(Font, Text, Position, Color, Rotation, Origin, Scale, SpriteEffects.None, Layer);
 	}
 

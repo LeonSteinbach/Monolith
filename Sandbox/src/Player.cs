@@ -31,9 +31,8 @@ public class Player : MNode
 
 	public override void Render(GraphicsDeviceManager graphics, SpriteBatch spriteBatch, GameTime gameTime)
 	{
-		if (IsVisible)
-			sprite.Render(graphics, spriteBatch, gameTime);
-		
+		if (!IsVisible) return;
+		sprite.Render(graphics, spriteBatch, gameTime);
 		RenderChildren(graphics, spriteBatch, gameTime);
 	}
 

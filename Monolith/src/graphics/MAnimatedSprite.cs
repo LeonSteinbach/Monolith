@@ -105,7 +105,7 @@ public class MAnimatedSprite : MSprite
 
     public override void Render(GraphicsDeviceManager graphics, SpriteBatch spriteBatch, GameTime gameTime)
     {
-        if (!Playing) return;
+        if (!Playing || !IsVisible) return;
 
         SpriteEffects effect = Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
         var rectangle = new Rectangle(

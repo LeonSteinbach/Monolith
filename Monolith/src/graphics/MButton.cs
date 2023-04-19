@@ -79,6 +79,8 @@ public class MButton : MNode
 
 	public override void Render(GraphicsDeviceManager graphics, SpriteBatch spriteBatch, GameTime gameTime)
 	{
+		if (!IsVisible) return;
+		
 		Sprite.Render(graphics, spriteBatch, gameTime);
 		Text?.Render(graphics, spriteBatch, gameTime);
 	}

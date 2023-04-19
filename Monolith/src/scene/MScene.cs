@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Monolith.scene;
 
-namespace Monolith.particles;
+namespace Monolith.scene;
 
 public class MScene : MNode
 {
@@ -14,6 +14,7 @@ public class MScene : MNode
 
 	public override void Render(GraphicsDeviceManager graphics, SpriteBatch spriteBatch, GameTime gameTime)
 	{
+		if (!IsVisible) return;
 		RenderChildren(graphics, spriteBatch, gameTime);
 	}
 

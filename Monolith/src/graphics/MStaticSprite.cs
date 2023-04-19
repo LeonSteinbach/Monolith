@@ -38,6 +38,8 @@ public class MStaticSprite : MSprite
 
 	public override void Render(GraphicsDeviceManager graphics, SpriteBatch spriteBatch, GameTime gameTime)
 	{
+		if (!IsVisible) return;
+		
 		spriteBatch.Draw(texture, Position, SourceOffset == Rectangle.Empty ? null : SourceOffset, Color, Rotation, Origin, Scale, SpriteEffects.None, Layer);
 	}
 
