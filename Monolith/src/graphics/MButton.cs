@@ -17,7 +17,7 @@ public class MButton : MNode
 	public event Action<MButton> OnMouseHover, OnMouseEntered, OnMouseLeft, OnMousePressed; 
 
 	public MButton(MStaticSprite defaultSprite, MStaticSprite hoverSprite, MText text = null, string hoverSound = null, 
-		string clickSound = null, SpriteFont font = null, Color color = default)
+		string clickSound = null)
 	{
 		defaultSprite.Name = "default";
 		hoverSprite.Name = "hover";

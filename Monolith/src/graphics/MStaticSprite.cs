@@ -30,13 +30,15 @@ public class MStaticSprite : MSprite
 		}
 	}
 
+	public override Rectangle SourceOffset { get; set; }
+
 	public override Vector2 Origin => Centered ? texture.Bounds.Size.ToVector2() / 2 : Vector2.Zero;
 
 	public override void Update(GameTime gameTime) { }
 
 	public override void Render(GraphicsDeviceManager graphics, SpriteBatch spriteBatch, GameTime gameTime)
 	{
-		spriteBatch.Draw(texture, Position, null, Color, Rotation, Origin, Scale, SpriteEffects.None, Layer);
+		spriteBatch.Draw(texture, Position, SourceOffset == Rectangle.Empty ? null : SourceOffset, Color, Rotation, Origin, Scale, SpriteEffects.None, Layer);
 	}
 
 	public override void OnAddToNode(MNode parent) { }

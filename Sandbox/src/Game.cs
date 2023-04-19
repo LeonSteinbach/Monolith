@@ -206,7 +206,28 @@ public class Game : MMonolithGame
 		var tbCursor = new MAnimatedSprite(cursor, 2, 1, 2, 500);
 
 		var tb1 = new MTextbox(tbBackground, tbText, tbCursor, tbPlaceholder, 10, true);
+
+		var pbBackground = new MStaticSprite(player)
+		{
+			Position = new Vector2(300, 100),
+			Scale = new Vector2(4, 1)
+		};
+
+		var pbForeground = new MStaticSprite(player)
+		{
+			Position = pbBackground.Position,
+			Scale = new Vector2(4f, 1f),
+			Color = Color.Yellow
+		};
+
+		var pbText = new MText("test", arial)
+		{
+			Position = pbBackground.Position
+		};
+
+		var pb1 = new MProgressBar(pbBackground, pbForeground, 0, 100, 70, pbText, MProgressBarDirection.Horizontal);
 		
+		guiScene.AddNode(pb1);
 		guiScene.AddNode(sl1);
 		guiScene.AddNode(rg1);
 		guiScene.AddNode(t2);

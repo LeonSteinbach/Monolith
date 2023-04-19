@@ -31,7 +31,9 @@ public class MText : MSprite
 	}
 	
 	public override Vector2 Origin => Centered ? MFontHelper.TextSize(Font, Text) / 2 : Vector2.Zero;
-	
+
+	public override Rectangle SourceOffset { get; set; }
+
 	public override void Update(GameTime gameTime) { }
 
 	public override void Render(GraphicsDeviceManager graphics, SpriteBatch spriteBatch, GameTime gameTime)
