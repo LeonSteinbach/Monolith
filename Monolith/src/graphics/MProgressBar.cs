@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Monolith.input;
+using Monolith.math;
 using Monolith.scene;
 
 namespace Monolith.graphics;
@@ -73,7 +74,7 @@ public class MProgressBar : MNode
 
 	public MText Text => GetNode<MText>("text");
 
-	public override Rectangle Hitbox => Background.Hitbox;
+	public override MPolygon Hitbox => Background.Hitbox;
 	
 	public bool MouseHover() => isHovering;
 
@@ -86,10 +87,10 @@ public class MProgressBar : MNode
 	private Rectangle GetSourceOffset()
 	{
 		var hitbox = new Rectangle(
-			Foreground.Hitbox.Left,
-			Foreground.Hitbox.Right,
-			(int)(Foreground.Hitbox.Width / Foreground.Scale.X),
-			(int)(Foreground.Hitbox.Height / Foreground.Scale.Y));
+			Foreground.Hitbox.BoundingBox.Left,
+			Foreground.Hitbox.BoundingBox.Right,
+			(int)(Foreground.Hitbox.BoundingBox.Width / Foreground.Scale.X),
+			(int)(Foreground.Hitbox.BoundingBox.Height / Foreground.Scale.Y));
 
 		return Direction switch
 		{
@@ -104,7 +105,7 @@ public class MProgressBar : MNode
 	public override void Update(GameTime gameTime)
 	{
 		wasHovering = isHovering;
-		isHovering = Hitbox.Contains(MInput.MousePosition());
+		isHovering = Hitbox.Intersect(MInput.MousePosition());
 
 		isPressed = isHovering && MInput.IsLeftPressed();
 

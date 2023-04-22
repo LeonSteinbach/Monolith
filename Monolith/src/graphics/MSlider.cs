@@ -50,32 +50,34 @@ public class MSlider : MNode
 	private Vector2 GetPositionFromValue(int x)
 	{
 		var background = Background;
+		var boundingBox = background.Hitbox.BoundingBox;
 		
 		int offset;
 		if (direction == MSliderDirection.Horizontal)
 		{
-			offset = (int)MMathHelper.MapRange(x, MinValue, MaxValue, 0, background.Hitbox.Width);
-			return new Vector2(background.Hitbox.Left + offset, background.Hitbox.Center.Y);
+			offset = (int)MMathHelper.MapRange(x, MinValue, MaxValue, 0, boundingBox.Width);
+			return new Vector2(boundingBox.Left + offset, boundingBox.Center.Y);
 		}
-		offset = (int)MMathHelper.MapRange(x, MinValue, MaxValue, 0, background.Hitbox.Height);
-		return new Vector2(background.Hitbox.Center.X, background.Hitbox.Bottom - offset);
+		offset = (int)MMathHelper.MapRange(x, MinValue, MaxValue, 0, boundingBox.Height);
+		return new Vector2(boundingBox.Center.X, boundingBox.Bottom - offset);
 	}
 	
 	private int GetValueFromPosition()
 	{
 		var background = Background;
+		var boundingBox = background.Hitbox.BoundingBox;
 		var button = Button;
 		
 		if (direction == MSliderDirection.Horizontal)
-			return (int)MMathHelper.MapRange(button.Position.X, background.Hitbox.Left, background.Hitbox.Right, MinValue, MaxValue);
-		return (int)MMathHelper.MapRange(button.Position.Y, background.Hitbox.Bottom, background.Hitbox.Top, MinValue, MaxValue);
+			return (int)MMathHelper.MapRange(button.Position.X, boundingBox.Left, boundingBox.Right, MinValue, MaxValue);
+		return (int)MMathHelper.MapRange(button.Position.Y, boundingBox.Bottom, boundingBox.Top, MinValue, MaxValue);
 	}
 
 	public MStaticSprite Background => GetNode<MStaticSprite>("background");
 
 	public MButton Button => GetNode<MButton>("button");
 
-	public override Rectangle Hitbox => Background.Hitbox;
+	public override MPolygon Hitbox => Background.Hitbox;
 	
 	public bool MouseHover() => isHovering;
 
@@ -98,10 +100,11 @@ public class MSlider : MNode
 	public override void Update(GameTime gameTime)
 	{
 		var background = Background;
+		var boundingBox = background.Hitbox.BoundingBox;
 		var button = Button;
 		
 		wasHovering = isHovering;
-		isHovering = Hitbox.Contains(MInput.MousePosition());
+		isHovering = Hitbox.Intersect(MInput.MousePosition());
 
 		isPressed = isPressed || isHovering && MInput.IsLeftPressed();
 
@@ -127,20 +130,20 @@ public class MSlider : MNode
 			if (direction == MSliderDirection.Horizontal)
 			{
 				int newPosition = MInput.MousePosition().X;
-				if (newPosition < background.Hitbox.Left)
-					button.Position = new Vector2(background.Hitbox.Left, button.Position.Y);
-				else if (newPosition > background.Hitbox.Left + background.Hitbox.Width)
-					button.Position = new Vector2(background.Hitbox.Left + background.Hitbox.Width, button.Position.Y);
+				if (newPosition < boundingBox.Left)
+					button.Position = new Vector2(boundingBox.Left, button.Position.Y);
+				else if (newPosition > boundingBox.Left + boundingBox.Width)
+					button.Position = new Vector2(boundingBox.Left + boundingBox.Width, button.Position.Y);
 				else
 					button.Position = new Vector2(newPosition, button.Position.Y);
 			}
 			else
 			{
 				int newPosition = MInput.MousePosition().Y;
-				if (newPosition < background.Hitbox.Top)
-					button.Position = new Vector2(button.Position.X, background.Hitbox.Top);
-				else if (newPosition > background.Hitbox.Top + background.Hitbox.Height)
-					button.Position = new Vector2(button.Position.X, background.Hitbox.Top + background.Hitbox.Height);
+				if (newPosition < boundingBox.Top)
+					button.Position = new Vector2(button.Position.X, boundingBox.Top);
+				else if (newPosition > boundingBox.Top + boundingBox.Height)
+					button.Position = new Vector2(button.Position.X, boundingBox.Top + boundingBox.Height);
 				else
 					button.Position = new Vector2(button.Position.X, newPosition);
 			}

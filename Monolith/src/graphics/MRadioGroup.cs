@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Monolith.math;
 using Monolith.scene;
 
 namespace Monolith.graphics;
@@ -42,7 +43,7 @@ public class MRadioGroup : MNode
 	
 	public string SelectedText => selectedButton?.Text.Text;
 
-	public override Rectangle Hitbox => Rectangle.Empty;
+	public override MPolygon Hitbox => MPolygon.Empty;
 
 	public override void Update(GameTime gameTime)
 	{

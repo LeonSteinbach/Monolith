@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Monolith.assets;
 using Monolith.input;
+using Monolith.math;
 using Monolith.scene;
 
 namespace Monolith.graphics;
@@ -50,7 +51,7 @@ public class MTextbox : MNode
 
 	private MText Placeholder => GetNode<MText>("placeholder");
 
-	public override Rectangle Hitbox => Background.Hitbox;
+	public override MPolygon Hitbox => Background.Hitbox;
 	
 	public bool MouseHover() => isHovering;
 
@@ -70,11 +71,13 @@ public class MTextbox : MNode
 		if (key == Keys.Back && Text.Text.Length > 0)
 			Text.Text = Text.Text.Substring(0, Text.Text.Length - 1);
 
-		Cursor.Position = new Vector2(Text.Hitbox.Left + (Text.Text.Length > 0 ? Text.Hitbox.Width + CursorOffset : 0), Text.Position.Y);
+		var boundingBox = Text.Hitbox.BoundingBox;
+
+		Cursor.Position = new Vector2(boundingBox.Left + (Text.Text.Length > 0 ? boundingBox.Width + CursorOffset : 0), Text.Position.Y);
 		Cursor.Update(gameTime);
 		
 		wasHovering = isHovering;
-		isHovering = Hitbox.Contains(MInput.MousePosition());
+		isHovering = Hitbox.Intersect(MInput.MousePosition());
 
 		isPressed = isHovering && MInput.IsLeftPressed();
 

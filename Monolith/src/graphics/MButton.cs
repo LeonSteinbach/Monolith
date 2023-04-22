@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Monolith.assets;
 using Monolith.input;
+using Monolith.math;
 using Monolith.scene;
 
 namespace Monolith.graphics;
@@ -43,7 +44,7 @@ public class MButton : MNode
 
 	public bool MousePressed() => isPressed;
 
-	public override Rectangle Hitbox => Sprite.Hitbox;
+	public override MPolygon Hitbox => Sprite.Hitbox;
 
 	private MSprite Sprite => MouseHover() ? GetNode<MStaticSprite>("hover") : GetNode<MStaticSprite>("default");
 
@@ -52,7 +53,7 @@ public class MButton : MNode
 	public override void Update(GameTime gameTime)
 	{
 		wasHovering = isHovering;
-		isHovering = Hitbox.Contains(MInput.MousePosition());
+		isHovering = Hitbox.Intersect(MInput.MousePosition());
 
 		isPressed = isHovering && MInput.IsLeftPressed();
 

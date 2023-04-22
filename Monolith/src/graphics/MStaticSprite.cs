@@ -1,5 +1,7 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Monolith.math;
 using Monolith.scene;
 
 namespace Monolith.graphics;
@@ -17,7 +19,7 @@ public class MStaticSprite : MSprite
 		Position = Vector2.Zero;
 	}
         
-	public override Rectangle Hitbox
+	public override MPolygon Hitbox
 	{
 		get
 		{
@@ -26,7 +28,13 @@ public class MStaticSprite : MSprite
 			int x = (int)(Position.X - Origin.X * Scale.X);
 			int y = (int)(Position.Y - Origin.Y * Scale.Y);
 
-			return new Rectangle(x, y, width, height);
+			return new MPolygon(new List<Vector2>
+			{
+				new (x, y),
+				new (x + width, y),
+				new (x + width, y + height),
+				new (x, y + height)
+			});
 		}
 	}
 

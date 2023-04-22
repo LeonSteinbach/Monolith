@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Monolith.assets;
 using Monolith.input;
+using Monolith.math;
 using Monolith.scene;
 
 namespace Monolith.graphics;
@@ -62,7 +63,7 @@ public class MRadioButton : MNode
 
     public bool IsSelected() => isChecked;
     
-    public override Rectangle Hitbox => Sprite.Hitbox;
+    public override MPolygon Hitbox => Sprite.Hitbox;
 
     public void Select()
     {
@@ -82,7 +83,7 @@ public class MRadioButton : MNode
     public override void Update(GameTime gameTime)
     {
         wasHovering = isHovering;
-        isHovering = Hitbox.Contains(MInput.MousePosition());
+        isHovering = Hitbox.Intersect(MInput.MousePosition());
 
         isPressed = isHovering && MInput.IsLeftPressed();
         

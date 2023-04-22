@@ -1,6 +1,8 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Monolith.assets;
+using Monolith.math;
 using Monolith.scene;
 
 namespace Monolith.graphics;
@@ -19,14 +21,20 @@ public class MText : MSprite
 		Font = font;
 	}
 	
-	public override Rectangle Hitbox
+	public override MPolygon Hitbox
 	{
 		get
 		{
 			Point location = (Position - Origin * Scale).ToPoint();
 			Point size = MFontHelper.TextSize(Font, Text).ToPoint() * Scale.ToPoint();
 
-			return new Rectangle(location, size);
+			return new MPolygon(new List<Vector2>
+			{
+				new (location.X, location.Y),
+				new (location.X + size.X, location.Y),
+				new (location.X + size.X, location.Y + size.Y),
+				new (location.X, location.Y + size.Y)
+			});
 		}
 	}
 	

@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Monolith.assets;
 using Monolith.input;
+using Monolith.math;
 using Monolith.scene;
 
 namespace Monolith.graphics
@@ -57,12 +58,12 @@ namespace Monolith.graphics
 
         public bool IsChecked() => isChecked;
         
-        public override Rectangle Hitbox => Sprite.Hitbox;
+        public override MPolygon Hitbox => Sprite.Hitbox;
 
         public override void Update(GameTime gameTime)
         {
             wasHovering = isHovering;
-            isHovering = Hitbox.Contains(MInput.MousePosition());
+            isHovering = Hitbox.Intersect(MInput.MousePosition());
 
             isPressed = isHovering && MInput.IsLeftPressed();
 

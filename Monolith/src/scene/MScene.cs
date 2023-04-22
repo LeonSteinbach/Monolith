@@ -1,12 +1,13 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Monolith.math;
 using Monolith.scene;
 
 namespace Monolith.scene;
 
 public class MScene : MNode
 {
-	public override Rectangle Hitbox { get; }
+	public override MPolygon Hitbox { get; }
 	public override void Update(GameTime gameTime)
 	{
 		UpdateChildren(gameTime);

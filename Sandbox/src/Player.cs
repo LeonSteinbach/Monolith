@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Monolith.assets;
 using Monolith.graphics;
+using Monolith.math;
 using Monolith.scene;
 
 namespace Sandbox;
@@ -20,7 +21,7 @@ public class Player : MNode
 		};
 	}
 
-	public override Rectangle Hitbox => sprite.Hitbox;
+	public override MPolygon Hitbox => sprite.Hitbox;
 
 	public override void Update(GameTime gameTime)
 	{

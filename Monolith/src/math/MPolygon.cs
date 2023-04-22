@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Monolith.graphics;
-using Monolith.input;
 
 namespace Monolith.math;
 
@@ -15,7 +14,9 @@ public class MPolygon
 	{
 		Points = points;
 	}
-	
+
+	public static MPolygon Empty => new (new());
+
 	public Vector2 CenterOfMass
 	{
 		get
@@ -65,6 +66,21 @@ public class MPolygon
 	}
 
 	public bool Intersect(Vector2 point)
+	{
+		bool inside = false;
+		for (int i = 0, j = Points.Count - 1; i < Points.Count; j = i++)
+		{
+			if (Points[i].Y > point.Y != Points[j].Y > point.Y &&
+			    point.X < (Points[j].X - Points[i].X) * (point.Y - Points[i].Y) / (Points[j].Y - Points[i].Y) + Points[i].X)
+			{
+				inside = !inside;
+			}
+		}
+		
+		return inside;
+	}
+	
+	public bool Intersect(Point point)
 	{
 		bool inside = false;
 		for (int i = 0, j = Points.Count - 1; i < Points.Count; j = i++)
@@ -140,5 +156,4 @@ public class MPolygon
 	{
 		MShapes.DrawRectangle(spriteBatch, BoundingBox, color, thickness);
 	}
-
 }

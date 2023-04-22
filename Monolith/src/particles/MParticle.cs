@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Monolith.graphics;
+using Monolith.math;
 using Monolith.scene;
 
 namespace Monolith.particles;
@@ -54,7 +55,7 @@ public class MParticle : MNode
 
 	public bool ShouldBeRemoved => Age >= timeToLive || sprite.Scale.X <= 0 || sprite.Scale.Y <= 0 || opacity <= 0;
 
-	public override Rectangle Hitbox => sprite.Hitbox;
+	public override MPolygon Hitbox => sprite.Hitbox;
 
 	public override void Update(GameTime gameTime)
 	{
