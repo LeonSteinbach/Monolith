@@ -1,86 +1,81 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Monolith.graphics;
+using Monolith.scene;
 
 namespace Monolith.particles;
 
-public class MParticle
+public class MParticle : MNode
 {
-	private readonly Texture2D texture;
-	private Color color;
-	private Vector2 position, velocity;
+	private readonly MSprite sprite;
+	private Vector2 velocity;
 	private readonly DateTime createdTime;
 	private readonly float timeToLive;
 	private float speed;
 	private readonly float speedDelta;
-	private float angle;
-	private readonly float angleDelta;
-	private float scale;
+	private readonly float rotationDelta;
 	private readonly float scaleDelta;
 	private float opacity;
 	private readonly float opacityDelta;
-	private readonly float layer;
 
-	public MParticle(Texture2D texture, Vector2 position, Vector2 velocity, float timeToLive)
+	public MParticle(MSprite sprite, Vector2 velocity, float timeToLive)
 	{
-		this.texture = texture;
-		this.position = position;
+		this.sprite = sprite;
 		this.velocity = velocity;
 		this.timeToLive = timeToLive;
 
 		createdTime = DateTime.Now;
-		color = Color.White;
 		speed = 1f;
 		speedDelta = 1f;
-		angle = 0f;
-		angleDelta = 1f;
-		scale = 1f;
+		rotationDelta = 1f;
 		scaleDelta = 1f;
 		opacity = 1f;
 		opacityDelta = 1f;
-		layer = 1f;
 	}
 
-	public MParticle(Texture2D texture, Vector2 position, Vector2 velocity, float timeToLive, 
-		Color color, float speed, float speedDelta, float angle, float angleDelta, 
-		float scale, float scaleDelta, float opacity, float opacityDelta, float layer)
+	public MParticle(MSprite sprite, Vector2 velocity, float timeToLive, 
+		float speed, float speedDelta, float rotationDelta, float scaleDelta, float opacity, float opacityDelta)
 	{
-		this.texture = texture;
-		this.position = position;
+		this.sprite = sprite;
 		this.velocity = velocity;
 		this.timeToLive = timeToLive;
 
 		createdTime = DateTime.Now;
-		this.color = color;
 		this.speed = speed;
 		this.speedDelta = speedDelta;
-		this.angle = angle;
-		this.angleDelta = angleDelta;
-		this.scale = scale;
+		this.rotationDelta = rotationDelta;
 		this.scaleDelta = scaleDelta;
 		this.opacity = opacity;
 		this.opacityDelta = opacityDelta;
-		this.layer = layer;
 	}
 
 	private float Age => (float) (DateTime.Now - createdTime).TotalMilliseconds;
 
-	public bool ShouldBeRemoved => Age >= timeToLive || scale <= 0 || opacity <= 0;
+	public bool ShouldBeRemoved => Age >= timeToLive || sprite.Scale.X <= 0 || sprite.Scale.Y <= 0 || opacity <= 0;
 
-	public void Update(GameTime gameTime)
+	public override Rectangle Hitbox => sprite.Hitbox;
+
+	public override void Update(GameTime gameTime)
 	{
 		speed += speedDelta * gameTime.ElapsedGameTime.Milliseconds;
 		velocity *= speed * gameTime.ElapsedGameTime.Milliseconds;
-		position += velocity * gameTime.ElapsedGameTime.Milliseconds;
-		angle += angleDelta * gameTime.ElapsedGameTime.Milliseconds;
-		scale += scaleDelta * gameTime.ElapsedGameTime.Milliseconds;
+		sprite.Position += velocity * gameTime.ElapsedGameTime.Milliseconds;
+		sprite.Rotation += rotationDelta * gameTime.ElapsedGameTime.Milliseconds;
+		sprite.Scale += new Vector2(scaleDelta) * gameTime.ElapsedGameTime.Milliseconds;
 		opacity += opacityDelta * gameTime.ElapsedGameTime.Milliseconds;
 
+		var color = sprite.Color;
 		color.A = (byte) opacity;
+		sprite.Color = color;
 	}
 
-	public void Render(SpriteBatch spriteBatch)
+	public override void Render(GraphicsDeviceManager graphics, SpriteBatch spriteBatch, GameTime gameTime)
 	{
-		spriteBatch.Draw(texture, position, null, color, angle, texture.Bounds.Center.ToVector2(), scale, SpriteEffects.None, layer);
+		sprite.Render(graphics, spriteBatch, gameTime);
 	}
+
+	public override void OnAddToNode(MNode parent) { }
+
+	public override void OnRemoveFromNode(MNode parent) { }
 }
