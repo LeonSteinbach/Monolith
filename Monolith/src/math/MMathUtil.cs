@@ -28,6 +28,20 @@ public static class MMathHelper
 		return items[RandInt(0, items.Count - 1)];
 	}
 	
+	public static float Cross(Vector2 a, Vector2 b)
+	{
+		return a.X * b.Y - a.Y * b.X;
+	}
+	
+	public static Vector2 RotatePoint(Vector2 point, Vector2 pivot, float angle)
+	{
+		float cos = (float)Math.Cos(angle);
+		float sin = (float)Math.Sin(angle);
+		float x = cos * (point.X - pivot.X) - sin * (point.Y - pivot.Y) + pivot.X;
+		float y = sin * (point.X - pivot.X) + cos * (point.Y - pivot.Y) + pivot.Y;
+		return new Vector2(x, y);
+	}
+	
 	public static float Interpolate(float x0, float x1, float alpha)
 	{
 		return x0 * (1 - alpha) + alpha * x1;
