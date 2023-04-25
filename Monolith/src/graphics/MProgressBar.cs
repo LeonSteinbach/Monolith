@@ -74,7 +74,7 @@ public class MProgressBar : MNode
 
 	public MText Text => GetNode<MText>("text");
 
-	public override MPolygon Hitbox => Background.Hitbox;
+	public override MGeometryObject Hitbox => Background.Hitbox;
 	
 	public bool MouseHover() => isHovering;
 
@@ -105,7 +105,7 @@ public class MProgressBar : MNode
 	public override void Update(GameTime gameTime)
 	{
 		wasHovering = isHovering;
-		isHovering = Hitbox.Intersect(MInput.MousePosition());
+		isHovering = MPhysicsHelper.Contains(Hitbox, MInput.MousePosition());
 
 		isPressed = isHovering && MInput.IsLeftPressed();
 

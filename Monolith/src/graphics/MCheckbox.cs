@@ -58,12 +58,12 @@ namespace Monolith.graphics
 
         public bool IsChecked() => isChecked;
         
-        public override MPolygon Hitbox => Sprite.Hitbox;
+        public override MGeometryObject Hitbox => Sprite.Hitbox;
 
         public override void Update(GameTime gameTime)
         {
             wasHovering = isHovering;
-            isHovering = Hitbox.Intersect(MInput.MousePosition());
+            isHovering = MPhysicsHelper.Contains(Hitbox, MInput.MousePosition());
 
             isPressed = isHovering && MInput.IsLeftPressed();
 

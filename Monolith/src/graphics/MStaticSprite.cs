@@ -19,7 +19,7 @@ public class MStaticSprite : MSprite
 		Position = Vector2.Zero;
 	}
         
-	public override MPolygon Hitbox
+	public override MGeometryObject Hitbox
 	{
 		get
 		{
@@ -28,13 +28,27 @@ public class MStaticSprite : MSprite
 			int x = (int)(Position.X - Origin.X * Scale.X);
 			int y = (int)(Position.Y - Origin.Y * Scale.Y);
 
-			return new MPolygon(new List<Vector2>
+			var result = new MPolygon(new Vector2[]
 			{
-				new (x, y),
-				new (x + width, y),
-				new (x + width, y + height),
-				new (x, y + height)
+				new(x, y),
+				new(x + width, y),
+				new(x + width, y + height),
+				new(x, y + height)
 			});
+
+			//var result = new MCircle(Position - Origin * Scale, 50);
+
+			/*var result = new MPolygon(new[]
+			{
+				new Vector2(Position.X + 0, Position.Y + 0),
+				new Vector2(Position.X + 50, Position.Y + 0),
+				new Vector2(Position.X + 60, Position.Y + 50),
+				new Vector2(Position.X + 25, Position.Y + 75),
+				new Vector2(Position.X + -50, Position.Y + 50),
+			});*/
+			result.Rotate(Rotation);
+			
+			return result;
 		}
 	}
 
@@ -54,10 +68,4 @@ public class MStaticSprite : MSprite
 	public override void OnAddToNode(MNode parent) { }
 
 	public override void OnRemoveFromNode(MNode parent) { }
-
-	public override void OnTransformPosition() { }
-
-	public override void OnTransformRotation() { }
-
-	public override void OnTransformScale() { }
 }

@@ -43,7 +43,7 @@ public class MRadioGroup : MNode
 	
 	public string SelectedText => selectedButton?.Text.Text;
 
-	public override MPolygon Hitbox => MPolygon.Empty;
+	public override MGeometryObject Hitbox => null;
 
 	public override void Update(GameTime gameTime)
 	{

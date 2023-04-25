@@ -63,7 +63,7 @@ public class MRadioButton : MNode
 
     public bool IsSelected() => isChecked;
     
-    public override MPolygon Hitbox => Sprite.Hitbox;
+    public override MGeometryObject Hitbox => Sprite.Hitbox;
 
     public void Select()
     {
@@ -83,7 +83,7 @@ public class MRadioButton : MNode
     public override void Update(GameTime gameTime)
     {
         wasHovering = isHovering;
-        isHovering = Hitbox.Intersect(MInput.MousePosition());
+        isHovering = MPhysicsHelper.Contains(Hitbox, MInput.MousePosition());
 
         isPressed = isHovering && MInput.IsLeftPressed();
         

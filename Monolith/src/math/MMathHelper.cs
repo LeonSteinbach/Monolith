@@ -41,16 +41,70 @@ public static class MMathHelper
 		float y = sin * (point.X - pivot.X) + cos * (point.Y - pivot.Y) + pivot.Y;
 		return new Vector2(x, y);
 	}
+
+	public static bool NearlyEqual(float a, float b)
+	{
+		return Math.Abs(a - b) <= 1e-6;
+	}
+	
+	public static bool NearlyEqual(Vector2 a, Vector2 b)
+	{
+		return Math.Abs(a.X - b.X) <= 1e-6 && Math.Abs(a.Y - b.Y) <= 1e-6;
+	}
+	
+	public static bool LineSegmentIntersection(Vector2 p1, Vector2 p2, Vector2 p3, Vector2 p4, out Vector2 intersectionPoint)
+	{
+		intersectionPoint = Vector2.Zero;
+
+		float s1_x, s1_y, s2_x, s2_y;
+		s1_x = p2.X - p1.X;
+		s1_y = p2.Y - p1.Y;
+		s2_x = p4.X - p3.X;
+		s2_y = p4.Y - p3.Y;
+
+		float s, t;
+		s = (-s1_y * (p1.X - p3.X) + s1_x * (p1.Y - p3.Y)) / (-s2_x * s1_y + s1_x * s2_y);
+		t = (s2_x * (p1.Y - p3.Y) - s2_y * (p1.X - p3.X)) / (-s2_x * s1_y + s1_x * s2_y);
+
+		if (s >= 0 && s <= 1 && t >= 0 && t <= 1)
+		{
+			intersectionPoint.X = p1.X + (t * s1_x);
+			intersectionPoint.Y = p1.Y + (t * s1_y);
+			return true;
+		}
+
+		return false;
+	}
 	
 	public static float Interpolate(float x0, float x1, float alpha)
 	{
 		return x0 * (1 - alpha) + alpha * x1;
 	}
 
+	public static float LengthSquared(Vector2 v)
+	{
+		return v.X * v.X + v.Y * v.Y;
+	}
+
+	public static float Length(Vector2 v)
+	{
+		return MathF.Sqrt(v.X * v.X + v.Y * v.Y);
+	}
+
+	public static float DistanceSquared(Vector2 a, Vector2 b)
+	{
+		float dx = a.X - b.X;
+		float dy = a.Y - b.Y;
+		return dx * dx + dy * dy;
+	}
+
 	public static float Distance(Vector2 a, Vector2 b)
 	{
-		return (float) Math.Sqrt(Math.Pow(b.X - a.X, 2) + Math.Pow(b.Y - a.Y, 2));
+		float dx = a.X - b.X;
+		float dy = a.Y - b.Y;
+		return MathF.Sqrt(dx * dx + dy * dy);
 	}
+
 
 	public static float Distance(Point a, Point b)
 	{

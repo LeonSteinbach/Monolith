@@ -48,13 +48,16 @@ public class MAnimatedSprite : MSprite
             int x = (int)(Position.X - Origin.X * Scale.X);
             int y = (int)(Position.Y - Origin.Y * Scale.Y);
 
-            return new MPolygon(new List<Vector2>
+            var result = new MPolygon(new Vector2[]
             {
-                new (x, y),
-                new (x + width, y),
-                new (x + width, y + height),
-                new (x, y + height)
+                new(x, y),
+                new(x + width, y),
+                new(x + width, y + height),
+                new(x, y + height)
             });
+            result.Rotate(Rotation);
+
+            return result;
         }
     }
 

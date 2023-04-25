@@ -77,7 +77,7 @@ public class MSlider : MNode
 
 	public MButton Button => GetNode<MButton>("button");
 
-	public override MPolygon Hitbox => Background.Hitbox;
+	public override MGeometryObject Hitbox => Background.Hitbox;
 	
 	public bool MouseHover() => isHovering;
 
@@ -104,7 +104,7 @@ public class MSlider : MNode
 		var button = Button;
 		
 		wasHovering = isHovering;
-		isHovering = Hitbox.Intersect(MInput.MousePosition());
+		isHovering = MPhysicsHelper.Contains(Hitbox, MInput.MousePosition());
 
 		isPressed = isPressed || isHovering && MInput.IsLeftPressed();
 

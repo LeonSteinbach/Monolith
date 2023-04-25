@@ -21,20 +21,23 @@ public class MText : MSprite
 		Font = font;
 	}
 	
-	public override MPolygon Hitbox
+	public override MGeometryObject Hitbox
 	{
 		get
 		{
 			Point location = (Position - Origin * Scale).ToPoint();
 			Point size = MFontHelper.TextSize(Font, Text).ToPoint() * Scale.ToPoint();
 
-			return new MPolygon(new List<Vector2>
+			var result = new MPolygon(new Vector2[]
 			{
-				new (location.X, location.Y),
-				new (location.X + size.X, location.Y),
-				new (location.X + size.X, location.Y + size.Y),
-				new (location.X, location.Y + size.Y)
+				new(location.X, location.Y),
+				new(location.X + size.X, location.Y),
+				new(location.X + size.X, location.Y + size.Y),
+				new(location.X, location.Y + size.Y)
 			});
+			result.Rotate(Rotation);
+
+			return result;
 		}
 	}
 	

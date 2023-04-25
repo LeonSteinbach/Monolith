@@ -3,13 +3,14 @@ using Microsoft.Xna.Framework.Graphics;
 using Monolith.assets;
 using Monolith.graphics;
 using Monolith.math;
+using Monolith.physics;
 using Monolith.scene;
 
 namespace Sandbox;
 
-public class Player : MNode
+public class Player : MBody
 {
-	private readonly MStaticSprite sprite;
+	public readonly MStaticSprite sprite;
 	
 	public Player()
 	{
@@ -21,13 +22,13 @@ public class Player : MNode
 		};
 	}
 
-	public override MPolygon Hitbox => sprite.Hitbox;
+	public override MGeometryObject Hitbox => sprite.Hitbox;
 
 	public override void Update(GameTime gameTime)
 	{
-		Position += Vector2.One;
-		
 		UpdateChildren(gameTime);
+		
+		base.Update(gameTime);
 	}
 
 	public override void Render(GraphicsDeviceManager graphics, SpriteBatch spriteBatch, GameTime gameTime)
@@ -35,6 +36,8 @@ public class Player : MNode
 		if (!IsVisible) return;
 		sprite.Render(graphics, spriteBatch, gameTime);
 		RenderChildren(graphics, spriteBatch, gameTime);
+		
+		base.Render(graphics, spriteBatch, gameTime);
 	}
 
 	public override void OnAddToNode(MNode parent)
@@ -50,15 +53,18 @@ public class Player : MNode
 	public override void OnTransformPosition()
 	{
 		sprite.Position = Position;
+		base.OnTransformPosition();
 	}
 	
 	public override void OnTransformRotation()
 	{
 		sprite.Rotation = Rotation;
+		base.OnTransformRotation();
 	}
 	
 	public override void OnTransformScale()
 	{
 		sprite.Scale = Scale;
+		base.OnTransformScale();
 	}
 }

@@ -55,7 +55,7 @@ public class MParticle : MNode
 
 	public bool ShouldBeRemoved => Age >= timeToLive || sprite.Scale.X <= 0 || sprite.Scale.Y <= 0 || opacity <= 0;
 
-	public override MPolygon Hitbox => sprite.Hitbox;
+	public override MGeometryObject Hitbox => sprite.Hitbox;
 
 	public override void Update(GameTime gameTime)
 	{

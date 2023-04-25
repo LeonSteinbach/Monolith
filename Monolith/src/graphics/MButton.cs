@@ -44,7 +44,7 @@ public class MButton : MNode
 
 	public bool MousePressed() => isPressed;
 
-	public override MPolygon Hitbox => Sprite.Hitbox;
+	public override MGeometryObject Hitbox => Sprite.Hitbox;
 
 	private MSprite Sprite => MouseHover() ? GetNode<MStaticSprite>("hover") : GetNode<MStaticSprite>("default");
 
@@ -53,7 +53,7 @@ public class MButton : MNode
 	public override void Update(GameTime gameTime)
 	{
 		wasHovering = isHovering;
-		isHovering = Hitbox.Intersect(MInput.MousePosition());
+		isHovering = MPhysicsHelper.Contains(Hitbox, MInput.MousePosition());
 
 		isPressed = isHovering && MInput.IsLeftPressed();
 

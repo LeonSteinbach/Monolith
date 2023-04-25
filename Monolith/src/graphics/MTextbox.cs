@@ -51,7 +51,7 @@ public class MTextbox : MNode
 
 	private MText Placeholder => GetNode<MText>("placeholder");
 
-	public override MPolygon Hitbox => Background.Hitbox;
+	public override MGeometryObject Hitbox => Background.Hitbox;
 	
 	public bool MouseHover() => isHovering;
 
@@ -77,7 +77,7 @@ public class MTextbox : MNode
 		Cursor.Update(gameTime);
 		
 		wasHovering = isHovering;
-		isHovering = Hitbox.Intersect(MInput.MousePosition());
+		isHovering = MPhysicsHelper.Contains(Hitbox, MInput.MousePosition());
 
 		isPressed = isHovering && MInput.IsLeftPressed();
 

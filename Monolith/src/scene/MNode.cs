@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Monolith.math;
@@ -18,7 +19,7 @@ public abstract class MNode
 	public bool IsVisible { get; set; } = true;
 	public MNode Parent { get; private set; }
 	
-	public abstract MPolygon Hitbox { get; }
+	public abstract MGeometryObject Hitbox { get; }
 
 	public Vector2 Position
 	{
